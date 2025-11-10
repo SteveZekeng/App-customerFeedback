@@ -1,9 +1,9 @@
-package com.ccaBank.feedback.Services;
+package com.ccaBank.feedback.services;
 
-import com.ccaBank.feedback.Dtos.StaffDto;
-import com.ccaBank.feedback.Entities.Staff;
-import com.ccaBank.feedback.Exceptions.NosuchExistException;
-import com.ccaBank.feedback.Repositories.StaffRepository;
+import com.ccaBank.feedback.dtos.StaffDto;
+import com.ccaBank.feedback.entities.Staff;
+import com.ccaBank.feedback.exceptions.NosuchExistException;
+import com.ccaBank.feedback.repositories.StaffRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

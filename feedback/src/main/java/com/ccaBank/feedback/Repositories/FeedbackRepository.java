@@ -1,6 +1,6 @@
-package com.ccaBank.feedback.Repositories;
+package com.ccaBank.feedback.repositories;
 
-import com.ccaBank.feedback.Entities.Feedback;
+import com.ccaBank.feedback.entities.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

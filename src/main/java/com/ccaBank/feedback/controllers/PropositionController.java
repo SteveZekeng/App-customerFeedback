@@ -1,9 +1,7 @@
-package com.ccaBank.feedback.Controller;
+package com.ccaBank.feedback.controllers;
 
-import com.ccaBank.feedback.Dtos.PropositionDto;
-import com.ccaBank.feedback.Entities.Proposition;
-import com.ccaBank.feedback.Services.PropositionService;
-import org.springframework.http.HttpStatus;
+import com.ccaBank.feedback.dtos.PropositionDto;
+import com.ccaBank.feedback.services.PropositionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +17,6 @@ public class PropositionController {
         this.propositionService = propositionService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> addProposition(@RequestBody PropositionDto propositionDto){
-        propositionService.createProposition(propositionDto);
-        return  new ResponseEntity<>("proposition created successfully", HttpStatus.CREATED);
-    }
 
     @GetMapping
     public List<PropositionDto> getAllPropositions(){
@@ -44,7 +37,7 @@ public class PropositionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProposotionById(@PathVariable Long id){
+    public ResponseEntity<String> deletePropositionById(@PathVariable Long id){
         propositionService.deleteProposition(id);
         return ResponseEntity.ok("proposition deleted successfully");
     }

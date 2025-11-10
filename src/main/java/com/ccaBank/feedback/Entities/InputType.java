@@ -1,4 +1,4 @@
-package com.ccaBank.feedback.Entities;
+package com.ccaBank.feedback.entities;
 
 public enum InputType {
     NUMBER,

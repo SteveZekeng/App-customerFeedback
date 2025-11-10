@@ -1,4 +1,4 @@
-package com.ccaBank.feedback.Exceptions;
+package com.ccaBank.feedback.exceptions;
 
 public class NosuchExistException extends RuntimeException {
 

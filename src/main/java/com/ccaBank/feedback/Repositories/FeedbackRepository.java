@@ -1,17 +1,14 @@
-package com.ccaBank.feedback.Repositories;
+package com.ccaBank.feedback.repositories;
 
-import com.ccaBank.feedback.Dtos.ResponseDto;
-import com.ccaBank.feedback.Entities.Feedback;
+import com.ccaBank.feedback.dtos.ResponseDto;
+import com.ccaBank.feedback.entities.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
-
-    List<ResponseDto> findByFeedbackId(Long feedbackId);
+    List<ResponseDto> findResponseById(Long feedbackId);
 
 
 

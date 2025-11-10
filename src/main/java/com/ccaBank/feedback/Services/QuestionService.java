@@ -1,12 +1,10 @@
-package com.ccaBank.feedback.Services;
+package com.ccaBank.feedback.services;
 
-import com.ccaBank.feedback.Dtos.PropositionDto;
-import com.ccaBank.feedback.Dtos.QuestionDto;
-import com.ccaBank.feedback.Entities.Proposition;
-import com.ccaBank.feedback.Entities.Question;
-import com.ccaBank.feedback.Exceptions.NosuchExistException;
-import com.ccaBank.feedback.Repositories.PropositionRepository;
-import com.ccaBank.feedback.Repositories.QuestionRepository;
+import com.ccaBank.feedback.dtos.QuestionDto;
+import com.ccaBank.feedback.entities.Question;
+import com.ccaBank.feedback.exceptions.NosuchExistException;
+import com.ccaBank.feedback.repositories.PropositionRepository;
+import com.ccaBank.feedback.repositories.QuestionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
