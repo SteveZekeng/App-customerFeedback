@@ -19,8 +19,8 @@ public class Proposition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Item items;
+    private String label;
+    private int score;
 
     @ManyToOne
     @JoinColumn(name = "question_id")

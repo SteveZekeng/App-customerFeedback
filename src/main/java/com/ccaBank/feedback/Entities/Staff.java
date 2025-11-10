@@ -22,7 +22,13 @@ public class Staff {
     private String staffId;
 
     @Column(length = 50, nullable = false)
-    private String nameStaff;
+    private String staffName;
+
+    @Column(nullable = false, unique = true)
+    private String staffPhone;
+
+    @Column(nullable = false, unique = true)
+    private String staffEmail;
 
     @OneToMany(mappedBy = "staff", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Feedback> feedback;

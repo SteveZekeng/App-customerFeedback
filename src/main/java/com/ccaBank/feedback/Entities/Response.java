@@ -17,7 +17,7 @@ public class Response {
     private Long id;
 
     private int value;
-    private String selectedItems;
+    private String selectedLabel;
 
     @OneToOne
     @JoinColumn(name = "question_id")

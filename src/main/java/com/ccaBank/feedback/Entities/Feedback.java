@@ -18,8 +18,8 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Customer customer;
+    private String customerName;
+    private String customerPhone;
     private String comment;
 
     @ManyToOne

@@ -1,16 +1,16 @@
-package com.ccaBank.feedback.Entities;
+package com.ccaBank.feedback.Dtos;
 
-import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
+public class PropositionDto {
 
     private String label;
     private int score;
+    private Long question_id;
 }
