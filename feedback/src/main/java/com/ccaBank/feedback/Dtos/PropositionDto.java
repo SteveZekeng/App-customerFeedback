@@ -1,6 +1,6 @@
-package com.ccaBank.feedback.Dtos;
+package com.ccaBank.feedback.dtos;
 
-import com.ccaBank.feedback.Entities.Item;
+import com.ccaBank.feedback.entities.Item;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

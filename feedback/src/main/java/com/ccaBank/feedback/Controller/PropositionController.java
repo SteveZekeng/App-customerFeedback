@@ -1,8 +1,8 @@
-package com.ccaBank.feedback.Controller;
+package com.ccaBank.feedback.controllers;
 
-import com.ccaBank.feedback.Dtos.PropositionDto;
-import com.ccaBank.feedback.Entities.Proposition;
-import com.ccaBank.feedback.Services.PropositionService;
+import com.ccaBank.feedback.dtos.PropositionDto;
+import com.ccaBank.feedback.entities.Proposition;
+import com.ccaBank.feedback.services.PropositionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
