@@ -1,5 +1,6 @@
 package com.ccaBank.feedback.services;
 
+import com.ccaBank.feedback.dtos.PropositionDto;
 import com.ccaBank.feedback.dtos.QuestionDto;
 import com.ccaBank.feedback.entities.Proposition;
 import com.ccaBank.feedback.entities.Question;
@@ -31,6 +32,20 @@ public class QuestionService {
 
     private QuestionDto mapToDto(Question question) {
         QuestionDto questionDto = modelMapper.map(question, QuestionDto.class);
+
+        if (question.getProposition() != null && !question.getProposition().isEmpty()) {
+            List<PropositionDto> propositionDto = question.getProposition()
+                    .stream()
+                    .map(proposition -> {
+                        PropositionDto dto = new PropositionDto();
+                        dto.setLabel(proposition.getLabel());
+                        dto.setScore(proposition.getScore());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            questionDto.setPropositions(propositionDto);
+        }
+
         return questionDto;
     }
 

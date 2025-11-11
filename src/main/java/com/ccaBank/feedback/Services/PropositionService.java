@@ -37,6 +37,24 @@ public class PropositionService {
     }
 
 
+    public List<PropositionDto> findAllPropositions() {
+        return propositionRepository.findAll()
+                .stream().map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public PropositionDto findPropositionById(Long id) {
+        Proposition proposition;
+        try {
+            proposition = propositionRepository.findById(id).
+                    orElseThrow(() -> new NosuchExistException("proposition introuvable"));
+        } catch (NosuchExistException e){
+            System.err.println("Erreur lors de la recherche :" + e.getMessage());
+            throw e;
+        }
+        return mapToDto(proposition);
+    }
+
     public PropositionDto updateProposition(Long id, PropositionDto propositionDto) {
         Optional<Proposition> existingProposition = propositionRepository.findById(id);
         if (!existingProposition.isPresent()) {

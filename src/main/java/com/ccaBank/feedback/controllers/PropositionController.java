@@ -18,6 +18,17 @@ public class PropositionController {
         this.propositionService = propositionService;
     }
 
+    @GetMapping
+    public List<PropositionDto> getAllPropositions(){
+
+        return propositionService.findAllPropositions();
+    }
+
+    @GetMapping("/{id}")
+    public PropositionDto getPropositionById(@PathVariable("id") Long id){
+
+        return propositionService.findPropositionById(id);
+    }
 
     @PutMapping("/{id}")
     public PropositionDto updatePropositionById(@PathVariable("id") Long id,
