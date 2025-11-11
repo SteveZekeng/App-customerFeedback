@@ -19,7 +19,7 @@ public class Response {
     private int value;
     private String selectedLabel;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
 

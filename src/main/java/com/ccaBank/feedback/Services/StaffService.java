@@ -77,7 +77,9 @@ public class StaffService {
     }
 
     public List<FeedbackDto> selectFeedbackByStaffId(String staffId) {
-        return staffRepository.getAllFeedbackByStaffId(staffId);
+        return staffRepository.getAllFeedbackByStaffId(staffId)
+                .stream().map(f -> modelMapper.map(f, FeedbackDto.class))
+                .collect(Collectors.toList());
     }
 
 

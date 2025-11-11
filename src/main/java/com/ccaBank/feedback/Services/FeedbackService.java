@@ -41,8 +41,8 @@ public class FeedbackService {
     public FeedbackDto createFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = mapToEntity(feedbackDto);
         try {
-            if (feedbackDto.getStaff_id() != null) {
-                Staff staff = staffRepository.findById(feedbackDto.getStaff_id()).orElseThrow(() ->
+            if (feedbackDto.getStaffId() != null) {
+                Staff staff = staffRepository.findById(feedbackDto.getStaffId()).orElseThrow(() ->
                         new NosuchExistException("staff introuvable"));
                 feedback.setStaff(staff);
             }
@@ -80,7 +80,9 @@ public class FeedbackService {
     }
 
     public List<ResponseDto> ResponsesByFeedbackId(Long feedbackId) {
-        return feedbackRepository.findResponseById(feedbackId);
+        return feedbackRepository.ResponsesByFeedbackId(feedbackId)
+                .stream().map(r -> modelMapper.map(r, ResponseDto.class))
+                .collect(Collectors.toList());
     }
 
     public double averageScore(Feedback feedback) {

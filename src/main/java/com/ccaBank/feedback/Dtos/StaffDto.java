@@ -1,9 +1,6 @@
 package com.ccaBank.feedback.dtos;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +13,7 @@ public class StaffDto {
     @NotNull
     private String staffName;
 
-    @NotNull @Min(9) @Max(9)
+    @NotNull @Size(min=9, max=9)
     private String staffPhone;
 
     @NotNull @Email

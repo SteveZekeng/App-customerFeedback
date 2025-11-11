@@ -26,6 +26,6 @@ public class Feedback {
     @JoinColumn(name = "staff_id")
     private Staff staff;
 
-    @OneToMany(mappedBy = "feedback",  cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "feedback",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Response> response;
 }

@@ -18,7 +18,7 @@ public class Proposition {
     private Long id;
 
     private String label;
-    private int score;
+    private double score;
 
     @ManyToOne
     @JoinColumn(name = "question_id")

@@ -44,13 +44,13 @@ public class ResponseService {
         Response response = mapToEntity(responseDto);
 
         try {
-            if (responseDto.getFeedback_id() != null) {
-                Feedback feedback = feedbackRepository.findById(responseDto.getFeedback_id()).orElseThrow(() ->
+            if (responseDto.getFeedbackId() != null) {
+                Feedback feedback = feedbackRepository.findById(responseDto.getFeedbackId()).orElseThrow(() ->
                         new NosuchExistException("feedback introuvable"));
                 response.setFeedback(feedback);
             }
-            if (responseDto.getQuestion_id() != null) {
-                Question question = questionRepository.findById(responseDto.getQuestion_id()).orElseThrow(() ->
+            if (responseDto.getQuestionId() != null) {
+                Question question = questionRepository.findById(responseDto.getQuestionId()).orElseThrow(() ->
                         new NosuchExistException("question introuvable"));
                 response.setQuestion(question);
             }

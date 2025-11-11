@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class PropositionDto {
 
     private String label;
-    private int score;
-    private Long question_id;
+    private double score;
 }

@@ -18,6 +18,5 @@ public class FeedbackDto {
 
     private String comment;
 
-    @NotNull
-    private Long staff_id;
+    private Long staffId;
 }
