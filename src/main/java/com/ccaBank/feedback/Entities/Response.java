@@ -16,7 +16,7 @@ public class Response {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int value;
+    private double value;
     private String selectedLabel;
 
     @ManyToOne

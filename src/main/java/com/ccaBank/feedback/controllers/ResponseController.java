@@ -18,11 +18,11 @@ public class ResponseController {
         this.responseService = responseService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> addResponse(@RequestBody ResponseDto responseDto){
-        responseService.createResponse(responseDto);
-        return  new ResponseEntity<>("Response saved successfully", HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<String> addResponse(@RequestBody ResponseDto responseDto){
+//        responseService.createResponse(responseDto);
+//        return  new ResponseEntity<>("Response saved successfully", HttpStatus.CREATED);
+//    }
 
     @GetMapping
     public List<ResponseDto> getAllReponses(){
@@ -47,7 +47,7 @@ public class ResponseController {
 
     @GetMapping("/responseFeedback/{feedbackId}")
     public List<ResponseDto> getAllByFeedbackId(@PathVariable("feedbackId") Long feedbackId){
-        return responseService.findByFeedbackId(feedbackId);
+        return responseService.responseByFeedbackId(feedbackId);
     }
 
 

@@ -1,5 +1,6 @@
 package com.ccaBank.feedback.services;
 
+import com.ccaBank.feedback.dtos.FeedbackDto;
 import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.entities.Feedback;
 import com.ccaBank.feedback.entities.Question;
@@ -50,22 +51,22 @@ public class ResponseService {
         return modelMapper.map(responseDto, Response.class);
     }
 
-    public ResponseDto createResponse(ResponseDto responseDto) {
-        Response response = mapToEntity(responseDto);
-
-            if (responseDto.getFeedback_id() != null) {
-                Feedback feedback = feedbackRepository.findById(responseDto.getFeedback_id()).orElseThrow(() ->
-                        new NosuchExistException("feedback introuvable"));
-                response.setFeedback(feedback);
-            }
-            if (responseDto.getQuestion_id() != null) {
-                Question question = questionRepository.findById(responseDto.getQuestion_id()).orElseThrow(() ->
-                        new NosuchExistException("question introuvable"));
-                response.setQuestion(question);
-            }
-
-        return mapToDto(responseRepository.save(response));
-    }
+//    public ResponseDto createResponse(ResponseDto responseDto) {
+//        Response response = mapToEntity(responseDto);
+//
+//            if (responseDto.getFeedback_id() != null) {
+//                Feedback feedback = feedbackRepository.findById(responseDto.getFeedback_id()).orElseThrow(() ->
+//                        new NosuchExistException("feedback introuvable"));
+//                response.setFeedback(feedback);
+//            }
+//            if (responseDto.getQuestion_id() != null) {
+//                Question question = questionRepository.findById(responseDto.getQuestion_id()).orElseThrow(() ->
+//                        new NosuchExistException("question introuvable"));
+//                response.setQuestion(question);
+//            }
+//
+//        return mapToDto(responseRepository.save(response));
+//    }
 
     public List<ResponseDto> findAllResponses() {
         return responseRepository.findAll()
@@ -85,9 +86,10 @@ public class ResponseService {
         return mapToDto(response);
     }
 
-    public List<ResponseDto> findByFeedbackId(Long feedbackId) {
+    public List<ResponseDto> responseByFeedbackId(Long feedbackId) {
         return responseRepository.findByFeedbackId(feedbackId)
-                .stream().map(this::mapToDto)
+                .stream()
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 

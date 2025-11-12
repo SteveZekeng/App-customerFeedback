@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseDto {
 
-    private int value;
+    private double value;
     private String selectedLabel;
 
     @NotNull

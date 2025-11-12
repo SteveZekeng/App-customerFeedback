@@ -1,11 +1,13 @@
 package com.ccaBank.feedback.services;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
+import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.entities.Feedback;
 import com.ccaBank.feedback.entities.Response;
 import com.ccaBank.feedback.entities.Staff;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.FeedbackRepository;
+import com.ccaBank.feedback.repositories.ResponseRepository;
 import com.ccaBank.feedback.repositories.StaffRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,13 +24,17 @@ public class FeedbackService {
 
     private final FeedbackRepository feedbackRepository;
     private final StaffRepository staffRepository;
+    private final ResponseRepository responseRepository;
     private final ModelMapper modelMapper;
+
 
     public FeedbackService(FeedbackRepository feedbackRepository,
                            StaffRepository staffRepository,
+                           ResponseRepository responseRepository,
                            ModelMapper modelMapper) {
         this.feedbackRepository = feedbackRepository;
         this.staffRepository = staffRepository;
+        this.responseRepository = responseRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -37,6 +43,21 @@ public class FeedbackService {
         if (feedback.getStaff() != null) {
             Staff staffDto = feedback.getStaff();
             feedbackDto.setStaff_id(staffDto.getId());
+        }
+
+        if (feedback.getResponse() != null &&  !feedback.getResponse().isEmpty()) {
+            List<ResponseDto> responseDto = feedback.getResponse()
+                    .stream()
+                    .map(response -> {
+                        ResponseDto dto = new ResponseDto();
+                        dto.setValue(response.getValue());
+                        dto.setSelectedLabel(response.getSelectedLabel());
+                        dto.setFeedback_id(response.getFeedback().getId());
+                        dto.setQuestion_id(response.getQuestion().getId());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            feedbackDto.setResponses(responseDto);
         }
         return feedbackDto;
     }
@@ -48,12 +69,28 @@ public class FeedbackService {
     public FeedbackDto createFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = mapToEntity(feedbackDto);
 
+        feedback.setCustomerName(feedbackDto.getCustomerName());
+        feedback.setCustomerPhone(feedbackDto.getCustomerPhone());
+        feedback.setComment(feedbackDto.getComment());
+
             if (feedbackDto.getStaff_id() != null) {
                 Staff staff = staffRepository.findById(feedbackDto.getStaff_id()).orElseThrow(() ->
                         new NosuchExistException("staff introuvable"));
                 feedback.setStaff(staff);
-            } else {
+            }
 
+            if (feedbackDto.getResponses() != null &&  !feedbackDto.getResponses().isEmpty()) {
+                List<Response> responses= feedbackDto.getResponses()
+                        .stream().map(responseDto -> {
+                            Response response = new Response();
+                            response.setValue(responseDto.getValue());
+                            response.setSelectedLabel(responseDto.getSelectedLabel());
+                            response.setFeedback(feedback);
+                            response.setQuestion(response.getQuestion());
+                            return response;
+                        })
+                        .collect(Collectors.toList());
+                feedback.setResponse(responses);
             }
 
         return mapToDto(feedbackRepository.save(feedback));
