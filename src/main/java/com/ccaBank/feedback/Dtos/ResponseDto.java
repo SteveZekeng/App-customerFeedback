@@ -14,8 +14,8 @@ public class ResponseDto {
     private String selectedLabel;
 
     @NotNull
-    private Long questionId;
+    private Long question_id;
 
     @NotNull
-    private Long feedbackId;
+    private Long feedback_id;
 }

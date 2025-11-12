@@ -37,8 +37,11 @@ public class PropositionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePropositionById(@PathVariable Long id){
-        propositionService.deleteProposition(id);
-        return ResponseEntity.ok("proposition deleted successfully");
+    public ResponseEntity<String> deletePropositionById(@PathVariable("id") Long id){
+        boolean deleted = propositionService.deleteProposition(id);
+        if (deleted)
+            return ResponseEntity.ok("Deleted successfully");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
     }
 }

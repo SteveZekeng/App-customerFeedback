@@ -24,10 +24,11 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private InputType inputType;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Proposition> proposition;
 
-    @OneToMany(mappedBy = "question",   cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question",  cascade = CascadeType.ALL)
     private List<Response> response;
 
 }

@@ -1,19 +1,22 @@
 package com.ccaBank.feedback.services;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
-import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.entities.Feedback;
 import com.ccaBank.feedback.entities.Response;
 import com.ccaBank.feedback.entities.Staff;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.FeedbackRepository;
 import com.ccaBank.feedback.repositories.StaffRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class FeedbackService {
 
@@ -31,6 +34,10 @@ public class FeedbackService {
 
     private FeedbackDto mapToDto(Feedback feedback) {
         FeedbackDto feedbackDto = modelMapper.map(feedback, FeedbackDto.class);
+        if (feedback.getStaff() != null) {
+            Staff staffDto = feedback.getStaff();
+            feedbackDto.setStaff_id(staffDto.getId());
+        }
         return feedbackDto;
     }
 
@@ -40,15 +47,15 @@ public class FeedbackService {
 
     public FeedbackDto createFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = mapToEntity(feedbackDto);
-        try {
-            if (feedbackDto.getStaffId() != null) {
-                Staff staff = staffRepository.findById(feedbackDto.getStaffId()).orElseThrow(() ->
+
+            if (feedbackDto.getStaff_id() != null) {
+                Staff staff = staffRepository.findById(feedbackDto.getStaff_id()).orElseThrow(() ->
                         new NosuchExistException("staff introuvable"));
                 feedback.setStaff(staff);
+            } else {
+
             }
-        }catch (NosuchExistException ex) {
-            System.err.println("Erreur lors de la creation feedback :" + ex.getMessage());
-        }
+
         return mapToDto(feedbackRepository.save(feedback));
     }
 
@@ -71,17 +78,22 @@ public class FeedbackService {
         return mapToDto(feedback);
     }
 
+    @Transactional
     public boolean deleteFeedback(Long id) {
-        if (feedbackRepository.existsById(id)) {
-            feedbackRepository.deleteById(id);
+        log.info("deleting feedback : {}", id);
+        Optional<Feedback> feedback = feedbackRepository.findById(id);
+        if (feedback.isPresent()) {
+            feedbackRepository.delete(feedback.get());
+            log.info("feedback deleted");
             return true;
         }
-        return false;
+            log.info("feedback not found");
+            return false;
     }
 
-    public List<ResponseDto> ResponsesByFeedbackId(Long feedbackId) {
-        return feedbackRepository.ResponsesByFeedbackId(feedbackId)
-                .stream().map(r -> modelMapper.map(r, ResponseDto.class))
+    public List<FeedbackDto> feedbackByStaffId (Long staffId) {
+        return feedbackRepository.findByStaffId(staffId)
+                .stream().map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 

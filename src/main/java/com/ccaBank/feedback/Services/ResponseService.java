@@ -10,6 +10,7 @@ import com.ccaBank.feedback.repositories.QuestionRepository;
 import com.ccaBank.feedback.repositories.ResponseRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +34,15 @@ public class ResponseService {
 
     private ResponseDto mapToDto(Response response) {
         ResponseDto responseDto  = modelMapper.map(response, ResponseDto.class);
+        if(response.getFeedback() != null) {
+            Feedback feedbackDto = response.getFeedback();
+            responseDto.setFeedback_id(feedbackDto.getId());
+        }
+        if(response.getQuestion() != null) {
+            Question questionDto = response.getQuestion();
+            responseDto.setQuestion_id(questionDto.getId());
+        }
+
         return responseDto;
     }
 
@@ -43,20 +53,17 @@ public class ResponseService {
     public ResponseDto createResponse(ResponseDto responseDto) {
         Response response = mapToEntity(responseDto);
 
-        try {
-            if (responseDto.getFeedbackId() != null) {
-                Feedback feedback = feedbackRepository.findById(responseDto.getFeedbackId()).orElseThrow(() ->
+            if (responseDto.getFeedback_id() != null) {
+                Feedback feedback = feedbackRepository.findById(responseDto.getFeedback_id()).orElseThrow(() ->
                         new NosuchExistException("feedback introuvable"));
                 response.setFeedback(feedback);
             }
-            if (responseDto.getQuestionId() != null) {
-                Question question = questionRepository.findById(responseDto.getQuestionId()).orElseThrow(() ->
+            if (responseDto.getQuestion_id() != null) {
+                Question question = questionRepository.findById(responseDto.getQuestion_id()).orElseThrow(() ->
                         new NosuchExistException("question introuvable"));
                 response.setQuestion(question);
             }
-        } catch (NosuchExistException e) {
-            System.err.println("Erreur lors de la creation :" + e.getMessage());
-        }
+
         return mapToDto(responseRepository.save(response));
     }
 
@@ -78,12 +85,19 @@ public class ResponseService {
         return mapToDto(response);
     }
 
+    public List<ResponseDto> findByFeedbackId(Long feedbackId) {
+        return responseRepository.findByFeedbackId(feedbackId)
+                .stream().map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public boolean deleteResponse(Long id) {
         if (responseRepository.existsById(id)) {
             responseRepository.deleteById(id);
             return true;
         }
-        return false;
+            return false;
     }
 
 

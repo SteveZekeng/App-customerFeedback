@@ -44,14 +44,12 @@ public class StaffController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStaffById(@PathVariable Long id){
-        staffService.deleteStaff(id);
-        return ResponseEntity.ok("Staff deleted successfully");
-    }
-
-    @GetMapping("/{staffId}")
-    public List<FeedbackDto> listFeedbackByStaffId(@PathVariable("staffId") String staffId){
-        return staffService.selectFeedbackByStaffId(staffId);
+    public ResponseEntity<String> deleteStaffById(@PathVariable("id") Long id){
+        boolean deleted = staffService.deleteStaff(id);
+        if (deleted)
+            return ResponseEntity.ok("Deleted successfully");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
     }
 }
 

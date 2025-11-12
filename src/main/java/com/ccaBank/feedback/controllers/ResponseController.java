@@ -37,9 +37,17 @@ public class ResponseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteResponseById(@PathVariable Long id){
-        responseService.deleteResponse(id);
-        return ResponseEntity.ok("Abonnement deleted successfully");
+    public ResponseEntity<String> deleteResponseById(@PathVariable("id") Long id){
+        boolean deleted = responseService.deleteResponse(id);
+        if (deleted)
+            return ResponseEntity.ok("Deleted successfully");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    }
+
+    @GetMapping("/responseFeedback/{feedbackId}")
+    public List<ResponseDto> getAllByFeedbackId(@PathVariable("feedbackId") Long feedbackId){
+        return responseService.findByFeedbackId(feedbackId);
     }
 
 

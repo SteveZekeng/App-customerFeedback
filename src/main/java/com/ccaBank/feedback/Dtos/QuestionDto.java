@@ -19,7 +19,6 @@ public class QuestionDto {
     @NotNull
     private InputType inputType;
 
-    @NotNull
     private List<PropositionDto> propositions;
 
 }

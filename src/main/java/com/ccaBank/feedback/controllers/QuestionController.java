@@ -43,9 +43,12 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id){
-        questionService.deleteQuestion(id);
-        return ResponseEntity.ok("question deleted successfully");
+    public ResponseEntity<String> deleteQuestionById(@PathVariable("id") Long id){
+        boolean deleted = questionService.deleteQuestion(id);
+        if (deleted)
+            return ResponseEntity.ok("Deleted successfully");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
     }
 
 }

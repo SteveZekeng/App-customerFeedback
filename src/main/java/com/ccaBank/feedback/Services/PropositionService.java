@@ -7,6 +7,7 @@ import com.ccaBank.feedback.repositories.PropositionRepository;
 import com.ccaBank.feedback.repositories.QuestionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,15 +62,18 @@ public class PropositionService {
             throw new NosuchExistException("proposition introuvable ou inexistant");
         } else {
             existingProposition.get().setLabel(propositionDto.getLabel());
+            existingProposition.get().setScore(propositionDto.getScore());
         }
         return mapToDto(propositionRepository.save(existingProposition.get()));
     }
+
+    @Transactional
     public boolean deleteProposition(Long id) {
         if (propositionRepository.existsById(id)) {
             propositionRepository.deleteById(id);
             return true;
-        } else {
-            return false;
         }
+            return false;
+
     }
 }

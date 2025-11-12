@@ -18,8 +18,8 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
-    private String staffId;
+    @Column(nullable = false, unique = true)
+    private String matricule;
 
     @Column(length = 50, nullable = false)
     private String staffName;

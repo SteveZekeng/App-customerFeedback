@@ -18,4 +18,7 @@ public class StaffDto {
 
     @NotNull @Email
     private String staffEmail;
+
+    @NotNull
+    private String matricule;
 }

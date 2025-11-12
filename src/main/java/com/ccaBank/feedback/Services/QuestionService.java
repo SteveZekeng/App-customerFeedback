@@ -105,12 +105,13 @@ public class QuestionService {
         return mapToDto(questionRepository.save(existingQuestion.get()));
     }
 
+    @Transactional
     public boolean deleteQuestion(Long id) {
         if (questionRepository.existsById(id)) {
             questionRepository.deleteById(id);
             return true;
-        }else {
-            return false;
         }
+            return false;
+
     }
 }

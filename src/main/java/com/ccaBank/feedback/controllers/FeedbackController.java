@@ -1,7 +1,6 @@
 package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
-import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.services.FeedbackService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +37,17 @@ public class FeedbackController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFeedbackById(@PathVariable Long id){
-        feedbackService.deleteFeedback(id);
-        return ResponseEntity.ok("Feedback deleted successfully");
+    public ResponseEntity<String> deleteFeedbackById(@PathVariable("id") Long id){
+        boolean deleted = feedbackService.deleteFeedback(id);
+        if (deleted)
+            return ResponseEntity.ok("Deleted successfully");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
     }
 
-    @GetMapping("/{feedbackId}")
-    public List<ResponseDto> getByFeedbackId(@PathVariable("feedbackId") Long feedbackId){
-        return feedbackService.ResponsesByFeedbackId(feedbackId);
+    @GetMapping("/feedbackStaff/{staffId}")
+    public List<FeedbackDto> getAllByStaffId(@PathVariable("staffId") Long staffId){
+        return feedbackService.feedbackByStaffId(staffId);
     }
 
 }

@@ -7,6 +7,7 @@ import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.StaffRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,20 +68,14 @@ public class StaffService {
         return mapToDto(staffRepository.save(existingStaff.get()));
     }
 
+    @Transactional
     public boolean deleteStaff(Long id) {
         if (staffRepository.existsById(id)) {
             staffRepository.deleteById(id);
             return true;
-        }else {
-            return false;
         }
-    }
+            return false;
 
-    public List<FeedbackDto> selectFeedbackByStaffId(String staffId) {
-        return staffRepository.getAllFeedbackByStaffId(staffId)
-                .stream().map(f -> modelMapper.map(f, FeedbackDto.class))
-                .collect(Collectors.toList());
     }
-
 
 }
