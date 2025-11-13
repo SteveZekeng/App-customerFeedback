@@ -1,6 +1,8 @@
 package com.ccaBank.feedback.services;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
+import com.ccaBank.feedback.dtos.PropositionDto;
+import com.ccaBank.feedback.dtos.QuestionDto;
 import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.entities.*;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
@@ -13,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,8 +50,8 @@ public class FeedbackService {
             feedbackDto.setStaff_id(staffDto.getId());
         }
 
-        if (feedback.getResponse() != null &&  !feedback.getResponse().isEmpty()) {
-            List<ResponseDto> responseDto = feedback.getResponse()
+        if (feedback.getResponses() != null &&  !feedback.getResponses().isEmpty()) {
+            List<ResponseDto> responseDto = feedback.getResponses()
                     .stream()
                     .map(response -> {
                         ResponseDto dto = new ResponseDto();
@@ -117,7 +120,7 @@ public class FeedbackService {
                             return response;
                         })
                         .collect(Collectors.toList());
-                feedback.setResponse(responses);
+                feedback.setResponses(responses);
             }
 
         return mapToDto(feedbackRepository.save(feedback));
@@ -161,22 +164,69 @@ public class FeedbackService {
                 .collect(Collectors.toList());
     }
 
-//    public double averageScore(Feedback feedback) {
-//        if (feedback.getResponse() == null || feedback.getResponse().isEmpty()) {
-//            return 0.0;
-//        }
-//
-//        double total = feedback.getResponse()
-//                .stream()
-//                .mapToDouble(Response::getValue)
-//                .sum();
-//
-//        return total / feedback.getResponse().size();
-//    }
 
     public double averageScore(Long feedbackId) {
 //        return Optional.ofNullable(feedbackRepository.findAverageScoreByFeedbackId(feedbackId))
 //                .orElse(0.0);
         return feedbackRepository.findAverageScoreByFeedbackId(feedbackId);
     }
+
+    public FeedbackDto getFeedbackFormByStaffMatricule(String matricule) {
+
+        Staff staff = staffRepository.findByMatricule(matricule)
+                .orElseThrow(() -> new NosuchExistException("Aucun staff trouvé avec le matricule : " + matricule));
+
+        staff.setMatricule(matricule);
+
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setValue(5.0);
+        responseDto.setSelectedLabel("Excellence");
+        List<ResponseDto> responsesDto = new ArrayList<>();
+        responsesDto.add(responseDto);
+
+        Response response = new Response();
+        response.setValue(5.0);
+        response.setSelectedLabel("Excellence");
+        List<Response> responses = new ArrayList<>();
+        responses.add(response);
+
+        Feedback feedback = new Feedback();
+        feedback.setCustomerName("Phil");
+        feedback.setCustomerPhone("655479987");
+        feedback.setComment("RAS");
+        feedback.setStaff(staff);
+        feedback.setResponses(responses);
+
+        List<QuestionDto> questionDto = questionRepository.findAll()
+                .stream()
+                .map(q -> {
+                    QuestionDto qDto = new QuestionDto();
+                    qDto.setLabelQuestion(q.getLabelQuestion());
+                    qDto.setPropositions(
+                            q.getProposition().stream()
+                                    .map(p -> new PropositionDto(p.getLabel(), p.getScore()))
+                                    .collect(Collectors.toList())
+                    );
+                    return qDto;
+                })
+                .toList();
+
+        FeedbackDto feedbackDto = new FeedbackDto();
+        feedbackDto.setCustomerName(feedback.getCustomerName());
+        feedbackDto.setCustomerPhone(feedback.getCustomerPhone());
+        feedbackDto.setQuestions(questionDto);
+        feedbackDto.setComment(feedback.getComment());
+        feedbackDto.setStaff_id(staff.getId());
+        feedbackDto.setResponses(responsesDto.stream().map(r1 -> {
+            ResponseDto responseDto2 = new ResponseDto();
+            responseDto2.setValue(r1.getValue());
+            responseDto2.setSelectedLabel(r1.getSelectedLabel());
+            return responseDto2;
+        }).collect(Collectors.toList()));
+
+
+        return feedbackDto;
+    }
+
+
 }

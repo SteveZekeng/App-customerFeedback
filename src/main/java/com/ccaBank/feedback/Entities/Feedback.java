@@ -28,5 +28,8 @@ public class Feedback {
 
     @OneToMany(mappedBy = "feedback", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Response> response;
+    private List<Response> responses;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> listQuestions;
 }

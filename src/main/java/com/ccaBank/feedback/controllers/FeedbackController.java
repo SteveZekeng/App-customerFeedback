@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -53,6 +54,11 @@ public class FeedbackController {
     @GetMapping("/scoring/{feedbackId}")
     public double getScoring(@PathVariable("feedbackId") Long feedbackId){
         return feedbackService.averageScore(feedbackId);
+    }
+
+    @GetMapping("/form/{matricule}")
+    public List<FeedbackDto> feedbackByMatricule(@PathVariable("matricule") String matricule){
+        return Collections.singletonList(feedbackService.getFeedbackFormByStaffMatricule(matricule));
     }
 
 }
