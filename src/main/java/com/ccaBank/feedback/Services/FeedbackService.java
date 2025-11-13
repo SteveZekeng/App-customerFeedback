@@ -2,11 +2,10 @@ package com.ccaBank.feedback.services;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
 import com.ccaBank.feedback.dtos.ResponseDto;
-import com.ccaBank.feedback.entities.Feedback;
-import com.ccaBank.feedback.entities.Response;
-import com.ccaBank.feedback.entities.Staff;
+import com.ccaBank.feedback.entities.*;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.FeedbackRepository;
+import com.ccaBank.feedback.repositories.QuestionRepository;
 import com.ccaBank.feedback.repositories.ResponseRepository;
 import com.ccaBank.feedback.repositories.StaffRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,16 +24,19 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final StaffRepository staffRepository;
     private final ResponseRepository responseRepository;
+    private final QuestionRepository questionRepository;
     private final ModelMapper modelMapper;
 
 
     public FeedbackService(FeedbackRepository feedbackRepository,
                            StaffRepository staffRepository,
                            ResponseRepository responseRepository,
+                           QuestionRepository questionRepository,
                            ModelMapper modelMapper) {
         this.feedbackRepository = feedbackRepository;
         this.staffRepository = staffRepository;
         this.responseRepository = responseRepository;
+        this.questionRepository = questionRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -66,6 +68,7 @@ public class FeedbackService {
         return modelMapper.map(feedbackDto, Feedback.class);
     }
 
+    @Transactional
     public FeedbackDto createFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = mapToEntity(feedbackDto);
 
@@ -86,7 +89,31 @@ public class FeedbackService {
                             response.setValue(responseDto.getValue());
                             response.setSelectedLabel(responseDto.getSelectedLabel());
                             response.setFeedback(feedback);
-                            response.setQuestion(response.getQuestion());
+
+                            Question question = questionRepository.findById(responseDto.getQuestion_id())
+                                    .orElseThrow(() -> new NosuchExistException("question introuvable avec id " ));
+                            response.setQuestion(question);
+
+                            if (responseDto.getSelectedLabel() != null) {
+                                Optional<Proposition> proposition = question.getProposition()
+                                        .stream()
+                                        .filter(p ->
+                                                p.getLabel().equalsIgnoreCase(responseDto.getSelectedLabel()))
+                                        .findFirst();
+
+                                if (proposition.isPresent()) {
+                                    response.setSelectedLabel(proposition.get().getLabel());
+                                    response.setValue(proposition.get().getScore());
+                                } else {
+                                    throw new NosuchExistException("proposition introuvable pour la question " + question.getLabelQuestion());
+                                }
+                            }
+
+                            else {
+                                response.setSelectedLabel(null);
+                                response.setValue(responseDto.getValue());
+                            }
+
                             return response;
                         })
                         .collect(Collectors.toList());
@@ -134,16 +161,22 @@ public class FeedbackService {
                 .collect(Collectors.toList());
     }
 
-    public double averageScore(Feedback feedback) {
-        if (feedback.getResponse() == null || feedback.getResponse().isEmpty()) {
-            return 0.0;
-        }
+//    public double averageScore(Feedback feedback) {
+//        if (feedback.getResponse() == null || feedback.getResponse().isEmpty()) {
+//            return 0.0;
+//        }
+//
+//        double total = feedback.getResponse()
+//                .stream()
+//                .mapToDouble(Response::getValue)
+//                .sum();
+//
+//        return total / feedback.getResponse().size();
+//    }
 
-        double total = feedback.getResponse()
-                .stream()
-                .mapToDouble(Response::getValue)
-                .sum();
-
-        return total / feedback.getResponse().size();
+    public double averageScore(Long feedbackId) {
+//        return Optional.ofNullable(feedbackRepository.findAverageScoreByFeedbackId(feedbackId))
+//                .orElse(0.0);
+        return feedbackRepository.findAverageScoreByFeedbackId(feedbackId);
     }
 }

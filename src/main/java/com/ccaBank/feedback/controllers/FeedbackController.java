@@ -50,4 +50,9 @@ public class FeedbackController {
         return feedbackService.feedbackByStaffId(staffId);
     }
 
+    @GetMapping("/scoring/{feedbackId}")
+    public double getScoring(@PathVariable("feedbackId") Long feedbackId){
+        return feedbackService.averageScore(feedbackId);
+    }
+
 }
