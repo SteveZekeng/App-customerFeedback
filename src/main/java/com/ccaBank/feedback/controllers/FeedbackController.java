@@ -38,12 +38,8 @@ public class FeedbackController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFeedbackById(@PathVariable("id") Long id){
-        boolean deleted = feedbackService.deleteFeedback(id);
-        if (deleted)
-            return ResponseEntity.ok("Deleted successfully");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    public void deleteFeedbackById(@PathVariable("id") Long id){
+        feedbackService.deleteFeedback(id);
     }
 
     @GetMapping("/feedbackStaff/{staffId}")
@@ -60,5 +56,11 @@ public class FeedbackController {
     public List<FeedbackDto> feedbackByMatricule(@PathVariable("matricule") String matricule){
         return Collections.singletonList(feedbackService.getFeedbackFormByStaffMatricule(matricule));
     }
+
+    @GetMapping("/avgStaff/{staffId}")
+    public Double getAverageScoreStaff(@PathVariable Long staffId) {
+        return feedbackService.averageScoreByStaff(staffId);
+    }
+
 
 }

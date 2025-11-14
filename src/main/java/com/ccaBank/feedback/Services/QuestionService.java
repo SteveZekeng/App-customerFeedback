@@ -7,6 +7,7 @@ import com.ccaBank.feedback.entities.Question;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.PropositionRepository;
 import com.ccaBank.feedback.repositories.QuestionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class QuestionService {
 
@@ -105,13 +107,13 @@ public class QuestionService {
         return mapToDto(questionRepository.save(existingQuestion.get()));
     }
 
-    @Transactional
-    public boolean deleteQuestion(Long id) {
-        if (questionRepository.existsById(id)) {
-            questionRepository.deleteById(id);
-            return true;
-        }
-            return false;
 
+    public void deleteQuestion(Long id) {
+        Optional<Question> question = questionRepository.findById(id);
+        if (!question.isPresent()) {
+            throw new NosuchExistException("question introuvable ou inexistant");
+        }
+        questionRepository.deleteById(id);
+        log.info("question deleted successfully");
     }
 }

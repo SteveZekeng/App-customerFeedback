@@ -5,6 +5,7 @@ import com.ccaBank.feedback.entities.Proposition;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.PropositionRepository;
 import com.ccaBank.feedback.repositories.QuestionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PropositionService {
 
@@ -67,13 +69,12 @@ public class PropositionService {
         return mapToDto(propositionRepository.save(existingProposition.get()));
     }
 
-    @Transactional
-    public boolean deleteProposition(Long id) {
-        if (propositionRepository.existsById(id)) {
-            propositionRepository.deleteById(id);
-            return true;
+    public void deleteProposition(Long id) {
+        Optional<Proposition> existingProposition = propositionRepository.findById(id);
+        if (!existingProposition.isPresent()) {
+            throw new NosuchExistException("proposition introuvable");
         }
-            return false;
-
+        propositionRepository.deleteById(id);
+        log.info("proposition deleted successfully");
     }
 }

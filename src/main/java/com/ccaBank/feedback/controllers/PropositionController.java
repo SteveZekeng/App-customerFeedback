@@ -2,8 +2,6 @@ package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.PropositionDto;
 import com.ccaBank.feedback.services.PropositionService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,11 +35,7 @@ public class PropositionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePropositionById(@PathVariable("id") Long id){
-        boolean deleted = propositionService.deleteProposition(id);
-        if (deleted)
-            return ResponseEntity.ok("Deleted successfully");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    public void deletePropositionById(@PathVariable("id") Long id){
+       propositionService.deleteProposition(id);
     }
 }

@@ -2,8 +2,7 @@ package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.services.ResponseService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,12 +36,8 @@ public class ResponseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteResponseById(@PathVariable("id") Long id){
-        boolean deleted = responseService.deleteResponse(id);
-        if (deleted)
-            return ResponseEntity.ok("Deleted successfully");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    public void deleteResponseById(@PathVariable("id") Long id){
+        responseService.deleteResponse(id);
     }
 
     @GetMapping("/responseFeedback/{feedbackId}")

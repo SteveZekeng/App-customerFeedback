@@ -33,5 +33,9 @@ public class Staff {
     @OneToMany(mappedBy = "staff", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Feedback> feedback;
 
+    @ManyToOne
+    @JoinColumn(name = "agence_id")
+    private Agence agence;
+
 
 }

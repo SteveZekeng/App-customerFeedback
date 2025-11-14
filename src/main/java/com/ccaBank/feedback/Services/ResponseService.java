@@ -9,13 +9,16 @@ import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.FeedbackRepository;
 import com.ccaBank.feedback.repositories.QuestionRepository;
 import com.ccaBank.feedback.repositories.ResponseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ResponseService {
 
@@ -87,19 +90,23 @@ public class ResponseService {
     }
 
     public List<ResponseDto> responseByFeedbackId(Long feedbackId) {
+        Optional<Feedback> feedback = feedbackRepository.findById(feedbackId);
+        if(!feedback.isPresent()) {
+            throw new NosuchExistException("feedback introuvable ou inexistante");
+        }
         return responseRepository.findByFeedbackId(feedbackId)
                 .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public boolean deleteResponse(Long id) {
-        if (responseRepository.existsById(id)) {
-            responseRepository.deleteById(id);
-            return true;
+    public void deleteResponse(Long id) {
+        Optional<Response> response = responseRepository.findById(id);
+        if (!response.isPresent()) {
+            throw new NosuchExistException("reponse introuvable ou inexistante");
         }
-            return false;
+        responseRepository.deleteById(id);
+        log.info("response deleted successfully");
     }
 
 

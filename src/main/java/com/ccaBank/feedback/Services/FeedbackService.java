@@ -145,17 +145,13 @@ public class FeedbackService {
         return mapToDto(feedback);
     }
 
-    @Transactional
-    public boolean deleteFeedback(Long id) {
-        log.info("deleting feedback : {}", id);
+    public void deleteFeedback(Long id) {
         Optional<Feedback> feedback = feedbackRepository.findById(id);
-        if (feedback.isPresent()) {
-            feedbackRepository.delete(feedback.get());
-            log.info("feedback deleted");
-            return true;
+        if (!feedback.isPresent()) {
+            throw new NosuchExistException("feedback introuvable ou inexistant");
         }
-            log.info("feedback not found");
-            return false;
+        feedbackRepository.deleteById(id);
+        log.info("feedback deleted successfully");
     }
 
     public List<FeedbackDto> feedbackByStaffId (Long staffId) {
@@ -221,12 +217,29 @@ public class FeedbackService {
             ResponseDto responseDto2 = new ResponseDto();
             responseDto2.setValue(r1.getValue());
             responseDto2.setSelectedLabel(r1.getSelectedLabel());
+            responseDto2.setFeedback_id(r1.getFeedback_id());
+            responseDto2.setQuestion_id(r1.getQuestion_id());
             return responseDto2;
         }).collect(Collectors.toList()));
 
 
         return feedbackDto;
     }
+
+    public Double averageScoreByStaff(Long staffId) {
+
+        Staff staff = staffRepository.findById(staffId)
+                .orElseThrow(() -> new NosuchExistException("Le staff avec l'id " + staffId + " n'existe pas"));
+        Double average = feedbackRepository.findAverageScoreByStaffId(staffId);
+
+        if (average == null) {
+            return 0.0;
+        }
+        return average;
+    }
+
+
+
 
 
 }

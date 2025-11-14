@@ -1,8 +1,8 @@
 package com.ccaBank.feedback.controllers;
 
-import com.ccaBank.feedback.dtos.FeedbackDto;
 import com.ccaBank.feedback.dtos.StaffDto;
 import com.ccaBank.feedback.services.StaffService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,12 +44,8 @@ public class StaffController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStaffById(@PathVariable("id") Long id){
-        boolean deleted = staffService.deleteStaff(id);
-        if (deleted)
-            return ResponseEntity.ok("Deleted successfully");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    public void deleteStaffById(@PathVariable("id") Long id){
+       staffService.deleteStaff(id);
     }
 }
 

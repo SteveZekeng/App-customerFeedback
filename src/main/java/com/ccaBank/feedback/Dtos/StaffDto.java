@@ -21,4 +21,7 @@ public class StaffDto {
 
     @NotNull
     private String matricule;
+
+    @NotNull
+    private Long agence_id;
 }
