@@ -17,10 +17,5 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     List<Staff> findByAgenceId(Long agenceId);
 
-//    @Query("SELECT s.matricule, s.staffName, AVG(r.value) as averageScore FROM Staff s, " +
-//            "Feedback f, Response r WHERE s.agence.id = :agenceId " +
-//            "GROUP BY s.matricule, s.staffName ORDER BY averageScore DESC ")
-//    List<Object[]> findBestStaffInAgence(@Param("agenceId") Long agenceId);
-
 
 }

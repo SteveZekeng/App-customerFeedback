@@ -49,4 +49,9 @@ public class AgenceController {
     public Double getAvgScoreByAgence(@PathVariable("agenceId") Long agenceId) {
         return agenceService.averageScoreByAgence(agenceId);
     }
+
+    @GetMapping("/listAgenceOrderDesc")
+    public List<AgenceDto> getListAgenceOrder() {
+        return agenceService.listAgenceOrder();
+    }
 }

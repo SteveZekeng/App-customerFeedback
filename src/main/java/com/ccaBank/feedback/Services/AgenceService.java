@@ -64,7 +64,6 @@ public class AgenceService {
             throw new NosuchExistException("agence introuvable ou inexistant");
         } else {
             existingAgence.get().setAgenceCity(agenceDto.getAgenceCity());
-            existingAgence.get().setAgenceMatriculate(agenceDto.getAgenceMatriculate());
             existingAgence.get().setAgenceLocation(agenceDto.getAgenceLocation());
         }
         return mapToDto(agenceRepository.save(existingAgence.get()));
@@ -89,8 +88,8 @@ public class AgenceService {
         return average;
     }
 
-
-
-
+    public List<AgenceDto> listAgenceOrder() {
+        return agenceRepository.findAgenceOrder();
+    }
 
 }
