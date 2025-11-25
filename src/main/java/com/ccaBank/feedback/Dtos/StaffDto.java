@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StaffDto {
 
+    private Long id;
+
     @NotNull
     private String staffName;
 

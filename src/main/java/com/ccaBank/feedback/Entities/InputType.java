@@ -4,6 +4,7 @@ public enum InputType {
     NUMBER,
     SELECT_OPT,
     TEXT,
-    CHECKBOX
+    CHECKBOX,
+    RADIO_BUTTON
 
 }

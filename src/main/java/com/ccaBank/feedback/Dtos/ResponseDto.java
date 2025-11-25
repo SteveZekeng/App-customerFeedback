@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseDto {
 
+    private Long id;
+
     private double value;
     private String selectedLabel;
 

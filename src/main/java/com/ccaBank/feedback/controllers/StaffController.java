@@ -1,5 +1,6 @@
 package com.ccaBank.feedback.controllers;
 
+import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.dtos.StaffDto;
 import com.ccaBank.feedback.services.StaffService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,11 @@ public class StaffController {
     @DeleteMapping("/{id}")
     public void deleteStaffById(@PathVariable("id") Long id){
        staffService.deleteStaff(id);
+    }
+
+    @GetMapping("/staffAgence/{agenceId}")
+    public List<StaffDto> getAllByAgenceId(@PathVariable("agenceId") Long agenceId){
+        return staffService.staffByAgenceId(agenceId);
     }
 }
 

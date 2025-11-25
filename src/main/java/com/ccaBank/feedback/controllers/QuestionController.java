@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customFeedback/question")
+@CrossOrigin(origins = "http://localhost:4200")
 public class QuestionController {
 
     private final QuestionService questionService;

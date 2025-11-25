@@ -9,7 +9,6 @@ import com.ccaBank.feedback.repositories.StaffRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -97,6 +96,17 @@ public class StaffService {
         }
         staffRepository.deleteById(id);
         log.info("staff deleted successfully");
+    }
+
+    public List<StaffDto> staffByAgenceId(Long agenceId) {
+        Optional<Agence> agence = agenceRepository.findById(agenceId);
+        if(!agence.isPresent()) {
+            throw new NosuchExistException("agence introuvable ou inexistante");
+        }
+        return staffRepository.findByAgenceId(agenceId)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
 }

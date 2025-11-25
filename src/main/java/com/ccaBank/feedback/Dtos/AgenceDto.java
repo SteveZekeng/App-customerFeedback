@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AgenceDto {
+    
+    private Long id;
 
     @NotNull
     private String agenceCity;

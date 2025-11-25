@@ -16,7 +16,7 @@ public interface AgenceRepository extends JpaRepository<Agence, Long> {
             "WHERE r.feedback.staff.agence.id = :agenceId")
     Double findAverageScoreByAgenceId(@Param("agenceId") Long agenceId);
 
-    @Query("SELECT new com.ccaBank.feedback.dtos.AgenceDto( a.agenceCity, " +
+    @Query("SELECT new com.ccaBank.feedback.dtos.AgenceDto(a.id, a.agenceCity, " +
             "a.agenceLocation, AVG(r.value)) FROM Response r JOIN r.feedback f " +
             "JOIN f.staff s JOIN s.agence a GROUP BY a.agenceCity, a.agenceLocation " +
             "ORDER BY AVG(r.value) DESC")

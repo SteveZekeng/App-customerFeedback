@@ -19,7 +19,7 @@ public class FeedbackController {
         this.feedbackService = feedbackService;
     }
 
-    @PostMapping
+    @PostMapping("/addFeedback")
     public ResponseEntity<String> addFeedback(@RequestBody FeedbackDto feedbackDto){
         feedbackService.createFeedback(feedbackDto);
         return  new ResponseEntity<>("feedback created successfully", HttpStatus.CREATED);

@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class QuestionDto {
 
+    private Long id;
+
     @NotNull
     private String labelQuestion;
 

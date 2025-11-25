@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class FeedbackDto {
 
+    private Long id;
+
     @NotNull
     private String customerName;
 
