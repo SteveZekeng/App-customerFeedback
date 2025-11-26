@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customFeedback/staff")
+@CrossOrigin(origins = "http://localhost:4200")
 public class StaffController {
 
     private final StaffService staffService;

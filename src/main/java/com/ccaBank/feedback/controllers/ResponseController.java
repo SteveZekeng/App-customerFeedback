@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customFeedback/response")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ResponseController {
 
     private final ResponseService responseService;

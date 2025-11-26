@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customFeedback/agence")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AgenceController {
 
     private final AgenceService  agenceService;

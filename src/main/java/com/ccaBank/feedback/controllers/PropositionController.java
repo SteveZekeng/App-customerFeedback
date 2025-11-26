@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customFeedback/proposition")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PropositionController {
 
     private final PropositionService propositionService;

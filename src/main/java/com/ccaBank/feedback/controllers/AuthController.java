@@ -4,21 +4,18 @@ import com.ccaBank.feedback.dtos.LoginCreds;
 import com.ccaBank.feedback.entities.User;
 import com.ccaBank.feedback.repositories.UserRepository;
 import com.ccaBank.feedback.util.JWTUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/customFeedback/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final UserRepository userRepository;
