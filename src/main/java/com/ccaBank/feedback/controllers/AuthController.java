@@ -14,8 +14,9 @@ import java.util.Collections;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/customFeedback/auth")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class AuthController {
 
     private final UserRepository userRepository;

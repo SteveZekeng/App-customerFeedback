@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/customFeedback/proposition")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class PropositionController {
 
     private final PropositionService propositionService;

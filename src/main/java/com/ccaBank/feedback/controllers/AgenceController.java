@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/customFeedback/agence")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class AgenceController {
 
     private final AgenceService  agenceService;

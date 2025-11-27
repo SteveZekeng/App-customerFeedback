@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/customFeedback/staff")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class StaffController {
 
     private final StaffService staffService;
