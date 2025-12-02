@@ -16,13 +16,11 @@ import java.util.stream.Collectors;
 public class AgenceService {
 
     private final AgenceRepository agenceRepository;
-    private final StaffRepository staffRepository;
     private final ModelMapper modelMapper;
 
     public AgenceService(AgenceRepository agenceRepository, StaffRepository staffRepository,
                          ModelMapper modelMapper) {
         this.agenceRepository = agenceRepository;
-        this.staffRepository = staffRepository;
         this.modelMapper = modelMapper;
     }
 

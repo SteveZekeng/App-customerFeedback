@@ -8,7 +8,6 @@ import com.ccaBank.feedback.repositories.QuestionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 public class PropositionService {
 
     private final PropositionRepository propositionRepository;
-    private final QuestionRepository questionRepository;
     private final ModelMapper modelMapper;
 
     public PropositionService(PropositionRepository propositionRepository,
@@ -27,7 +25,6 @@ public class PropositionService {
                               QuestionRepository questionRepository) {
         this.propositionRepository = propositionRepository;
         this.modelMapper = modelMapper;
-        this.questionRepository = questionRepository;
     }
 
     private PropositionDto mapToDto(Proposition proposition){
