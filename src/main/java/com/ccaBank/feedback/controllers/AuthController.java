@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/customFeedback/auth")
 
 public class AuthController {
