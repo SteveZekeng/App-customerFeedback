@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,11 +32,15 @@ public class Staff {
     private String staffEmail;
 
     @OneToMany(mappedBy = "staff", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
-    private List<Feedback> feedback;
+    private List<Feedback> feedback = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "agence_id")
     private Agence agence;
+
+    public double getAverage(){
+        return feedback.stream().mapToDouble(Feedback::getAverage).average().orElse(0.0);
+    }
 
 
 }

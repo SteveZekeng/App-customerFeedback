@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,5 +28,9 @@ public class Agence {
     private String agenceLocation;
 
     @OneToMany(mappedBy = "agence", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Staff> staffs;
+    private List<Staff> staffs = new ArrayList<>();
+
+    public double getAverage(){
+        return staffs.stream().mapToDouble(Staff::getAverage).average().orElse(0.0);
+    }
 }

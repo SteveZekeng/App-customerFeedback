@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,8 +29,12 @@ public class Feedback {
 
     @OneToMany(mappedBy = "feedback", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Response> responses;
+    private List<Response> responses = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> listQuestions;
+
+    public double getAverage(){
+        return responses.stream().mapToDouble(Response::getValue).average().orElse(0.0);
+    }
 }

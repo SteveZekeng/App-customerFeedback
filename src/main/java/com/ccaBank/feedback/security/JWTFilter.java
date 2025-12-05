@@ -32,7 +32,7 @@ public class JWTFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        //Ne pas filtrer les endpoints publics
+
         if (request.getServletPath().startsWith("/customFeedback/auth")) {
             filterChain.doFilter(request, response);
             return;

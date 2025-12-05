@@ -161,12 +161,6 @@ public class FeedbackService {
     }
 
 
-    public double averageScore(Long feedbackId) {
-//        return Optional.ofNullable(feedbackRepository.findAverageScoreByFeedbackId(feedbackId))
-//                .orElse(0.0);
-        return feedbackRepository.findAverageScoreByFeedbackId(feedbackId);
-    }
-
     public FeedbackDto getFeedbackFormByStaffMatricule(String matricule) {
 
         Staff staff = staffRepository.findByMatricule(matricule)
@@ -230,15 +224,16 @@ public class FeedbackService {
 
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new NosuchExistException("Le staff avec l'id " + staffId + " n'existe pas"));
-        Double average = feedbackRepository.findAverageScoreByStaffId(staffId);
 
-        if (average == null) {
-            return 0.0;
-        }
-        return average;
+        return staff.getAverage();
     }
 
+    public Double averageScore(Long feedbackId) {
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new NosuchExistException("Le feedback avec l'id " + feedbackId + " n'existe pas"));
 
+        return feedback.getAverage();
+    }
 
 
 

@@ -8,6 +8,7 @@ import com.ccaBank.feedback.repositories.StaffRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,16 +79,15 @@ public class AgenceService {
     public Double averageScoreByAgence(Long agenceId) {
         Agence agence = agenceRepository.findById(agenceId)
                 .orElseThrow(() -> new NosuchExistException("L'agence avec l'id " + agenceId + " n'existe pas"));
-        Double average = agenceRepository.findAverageScoreByAgenceId(agenceId);
-
-        if (average == null) {
-            return 0.0;
-        }
-        return average;
+        return agence.getAverage();
     }
 
     public List<AgenceDto> listAgenceOrder() {
-        return agenceRepository.findAgenceOrder();
+        List<Agence> agences = agenceRepository.findAll();
+        agences.sort(Comparator.comparing(Agence::getAverage).reversed().thenComparing(Agence::getAgenceLocation));
+        return agences.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
 }
