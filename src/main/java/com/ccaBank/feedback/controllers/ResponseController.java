@@ -1,0 +1,50 @@
+package com.ccaBank.feedback.controllers;
+
+import com.ccaBank.feedback.dtos.ResponseDto;
+import com.ccaBank.feedback.services.ResponseService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/customFeedback/response")
+
+public class ResponseController {
+
+    private final ResponseService responseService;
+
+    public ResponseController(ResponseService responseService) {
+        this.responseService = responseService;
+    }
+
+//    @PostMapping
+//    public ResponseEntity<String> addResponse(@RequestBody ResponseDto responseDto){
+//        responseService.createResponse(responseDto);
+//        return  new ResponseEntity<>("Response saved successfully", HttpStatus.CREATED);
+//    }
+
+    @GetMapping
+    public List<ResponseDto> getAllReponses(){
+
+        return responseService.findAllResponses();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseDto getResponseById(@PathVariable("id") Long id){
+
+        return responseService.findResponseById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteResponseById(@PathVariable("id") Long id){
+        responseService.deleteResponse(id);
+    }
+
+    @GetMapping("/responseFeedback/{feedbackId}")
+    public List<ResponseDto> getAllByFeedbackId(@PathVariable("feedbackId") Long feedbackId){
+        return responseService.responseByFeedbackId(feedbackId);
+    }
+
+
+}

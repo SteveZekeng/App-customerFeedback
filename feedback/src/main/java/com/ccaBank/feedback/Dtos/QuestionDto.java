@@ -1,4 +1,4 @@
-package com.ccaBank.feedback.Dtos;
+package com.ccaBank.feedback.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

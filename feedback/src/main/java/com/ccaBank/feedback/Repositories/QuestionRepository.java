@@ -1,6 +1,6 @@
-package com.ccaBank.feedback.Repositories;
+package com.ccaBank.feedback.repositories;
 
-import com.ccaBank.feedback.Entities.Question;
+import com.ccaBank.feedback.entities.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
