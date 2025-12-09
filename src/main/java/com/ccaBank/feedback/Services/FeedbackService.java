@@ -169,21 +169,22 @@ public class FeedbackService {
         staff.setMatricule(matricule);
 
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setValue(5.0);
-        responseDto.setSelectedLabel("Excellence");
+        responseDto.setValue(0);
+        responseDto.setSelectedLabel("");
         List<ResponseDto> responsesDto = new ArrayList<>();
         responsesDto.add(responseDto);
 
         Response response = new Response();
-        response.setValue(5.0);
-        response.setSelectedLabel("Excellence");
+        response.setValue(0);
+        response.setSelectedLabel("");
         List<Response> responses = new ArrayList<>();
         responses.add(response);
 
         Feedback feedback = new Feedback();
-        feedback.setCustomerName("Phil");
-        feedback.setCustomerPhone("655479987");
-        feedback.setComment("RAS");
+        feedback.setId(feedback.getId());
+        feedback.setCustomerName("");
+        feedback.setCustomerPhone("");
+        feedback.setComment("");
         feedback.setStaff(staff);
         feedback.setResponses(responses);
 
@@ -191,7 +192,9 @@ public class FeedbackService {
                 .stream()
                 .map(q -> {
                     QuestionDto qDto = new QuestionDto();
+                    qDto.setId(q.getId());
                     qDto.setLabelQuestion(q.getLabelQuestion());
+                    qDto.setInputType(q.getInputType());
                     qDto.setPropositions(
                             q.getProposition().stream()
                                     .map(p -> new PropositionDto(p.getLabel(), p.getScore()))
