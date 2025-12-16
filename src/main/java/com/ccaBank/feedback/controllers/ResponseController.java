@@ -3,6 +3,8 @@ package com.ccaBank.feedback.controllers;
 import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.services.ResponseService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,11 @@ public class ResponseController {
         this.responseService = responseService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<String> addResponse(@RequestBody ResponseDto responseDto){
-//        responseService.createResponse(responseDto);
-//        return  new ResponseEntity<>("Response saved successfully", HttpStatus.CREATED);
-//    }
+    @PostMapping
+    public ResponseEntity<String> addResponse(@RequestBody ResponseDto responseDto){
+        responseService.createResponse(responseDto);
+        return  new ResponseEntity<>("Response saved successfully", HttpStatus.CREATED);
+    }
 
     @GetMapping
     public List<ResponseDto> getAllReponses(){

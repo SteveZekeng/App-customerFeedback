@@ -31,8 +31,6 @@ public class Feedback {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Response> responses = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> listQuestions;
 
     public double getAverage(){
         return responses.stream().mapToDouble(Response::getValue).average().orElse(0.0);

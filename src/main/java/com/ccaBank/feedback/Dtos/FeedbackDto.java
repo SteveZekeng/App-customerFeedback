@@ -23,7 +23,7 @@ public class FeedbackDto {
 
     private String comment;
 
-    private Long staff_id;
+    private StaffDto staff_id;
 
     private List<ResponseDto> responses;
 

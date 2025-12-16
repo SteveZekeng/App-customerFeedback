@@ -2,6 +2,7 @@ package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
 import com.ccaBank.feedback.services.FeedbackService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/customFeedback/feedback")
 public class FeedbackController {
@@ -20,9 +22,9 @@ public class FeedbackController {
     }
 
     @PostMapping("/addFeedback")
-    public ResponseEntity<String> addFeedback(@RequestBody FeedbackDto feedbackDto){
-        feedbackService.createFeedback(feedbackDto);
-        return  new ResponseEntity<>("feedback created successfully", HttpStatus.CREATED);
+    public FeedbackDto addFeedback(@RequestBody FeedbackDto feedbackDto){
+
+        return  feedbackService.createFeedback(feedbackDto);
     }
 
     @GetMapping
@@ -42,14 +44,14 @@ public class FeedbackController {
         feedbackService.deleteFeedback(id);
     }
 
-    @GetMapping("/feedbackStaff/{staffId}")
-    public List<FeedbackDto> getAllByStaffId(@PathVariable("staffId") Long staffId){
-        return feedbackService.feedbackByStaffId(staffId);
-    }
-
     @GetMapping("/form/{matricule}")
     public List<FeedbackDto> feedbackByMatricule(@PathVariable("matricule") String matricule){
         return Collections.singletonList(feedbackService.getFeedbackFormByStaffMatricule(matricule));
+    }
+
+    @GetMapping("/feedbackStaff/{staffId}")
+    public List<FeedbackDto> getAllByStaffId(@PathVariable("staffId") Long staffId){
+        return feedbackService.feedbackByStaffId(staffId);
     }
 
     @GetMapping("/avgStaff/{staffId}")

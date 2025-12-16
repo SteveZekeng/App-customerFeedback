@@ -20,9 +20,9 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addQuestion(@RequestBody QuestionDto questionDto){
-        questionService.createQuestion(questionDto);
-        return  new ResponseEntity<>("question created successfully", HttpStatus.CREATED);
+    public QuestionDto addQuestion(@RequestBody QuestionDto questionDto){
+
+        return  questionService.createQuestion(questionDto);
     }
 
     @GetMapping

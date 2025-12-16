@@ -1,9 +1,6 @@
 package com.ccaBank.feedback.services;
 
-import com.ccaBank.feedback.dtos.FeedbackDto;
-import com.ccaBank.feedback.dtos.PropositionDto;
-import com.ccaBank.feedback.dtos.QuestionDto;
-import com.ccaBank.feedback.dtos.ResponseDto;
+import com.ccaBank.feedback.dtos.*;
 import com.ccaBank.feedback.entities.*;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.FeedbackRepository;
@@ -45,9 +42,10 @@ public class FeedbackService {
 
     private FeedbackDto mapToDto(Feedback feedback) {
         FeedbackDto feedbackDto = modelMapper.map(feedback, FeedbackDto.class);
+
         if (feedback.getStaff() != null) {
-            Staff staffDto = feedback.getStaff();
-            feedbackDto.setStaff_id(staffDto.getId());
+            StaffDto staffDto = modelMapper.map(feedback.getStaff(), StaffDto.class);
+            feedbackDto.setStaff_id(staffDto);
         }
 
         if (feedback.getResponses() != null &&  !feedback.getResponses().isEmpty()) {
@@ -79,49 +77,57 @@ public class FeedbackService {
         feedback.setCustomerPhone(feedbackDto.getCustomerPhone());
         feedback.setComment(feedbackDto.getComment());
 
-            if (feedbackDto.getStaff_id() != null) {
-                Staff staff = staffRepository.findById(feedbackDto.getStaff_id()).orElseThrow(() ->
-                        new NosuchExistException("staff introuvable"));
+            if (feedbackDto.getStaff_id() != null && feedbackDto.getStaff_id().getId() != null) {
+                Staff staff = staffRepository.findById(feedbackDto.getStaff_id().getId())
+                                .orElseThrow(() -> new NosuchExistException("agence introuvable"));
                 feedback.setStaff(staff);
             }
 
-            if (feedbackDto.getResponses() != null &&  !feedbackDto.getResponses().isEmpty()) {
-                List<Response> responses= feedbackDto.getResponses()
-                        .stream().map(responseDto -> {
-                            Response response = new Response();
+        if (feedbackDto.getResponses() != null && !feedbackDto.getResponses().isEmpty()) {
+
+            List<Response> responses = feedbackDto.getResponses()
+                    .stream()
+                    .map(responseDto -> {
+
+                        if (responseDto.getQuestion_id() == null) {
+                            throw new NosuchExistException("question_id manquant dans une réponse");
+                        }
+
+                        Question question = questionRepository.findById(responseDto.getQuestion_id())
+                                .orElseThrow(() -> new NosuchExistException(
+                                        "question introuvable avec id : " + responseDto.getQuestion_id()));
+
+                        Response response = new Response();
+                        response.setFeedback(feedback);
+                        response.setQuestion(question);
+
+                        if (responseDto.getSelectedLabel() != null &&
+                                !responseDto.getSelectedLabel().isEmpty()) {
+
+                            Optional<Proposition> propOpt = question.getProposition()
+                                    .stream()
+                                    .filter(p -> p.getLabel().equalsIgnoreCase(responseDto.getSelectedLabel()))
+                                    .findFirst();
+
+                            if (propOpt.isEmpty()) {
+                                throw new NosuchExistException("proposition introuvable pour la question : "
+                                        + question.getLabelQuestion());
+                            }
+
+                            Proposition prop = propOpt.get();
+                            response.setSelectedLabel(prop.getLabel());
+                            response.setValue(prop.getScore());
+                        } else {
+                            response.setSelectedLabel("");
                             response.setValue(responseDto.getValue());
-                            response.setSelectedLabel(responseDto.getSelectedLabel());
-                            response.setFeedback(feedback);
+                        }
 
-                            Question question = questionRepository.findById(responseDto.getQuestion_id())
-                                    .orElseThrow(() -> new NosuchExistException("question introuvable avec id " ));
-                            response.setQuestion(question);
+                        return response;
+                    })
+                    .collect(Collectors.toList());
 
-                            if (responseDto.getSelectedLabel() != null) {
-                                Optional<Proposition> proposition = question.getProposition()
-                                        .stream()
-                                        .filter(p ->
-                                                p.getLabel().equalsIgnoreCase(responseDto.getSelectedLabel()))
-                                        .findFirst();
-
-                                if (proposition.isPresent()) {
-                                    response.setSelectedLabel(proposition.get().getLabel());
-                                    response.setValue(proposition.get().getScore());
-                                } else {
-                                    throw new NosuchExistException("proposition introuvable pour la question " + question.getLabelQuestion());
-                                }
-                            }
-
-                            else {
-                                response.setSelectedLabel(null);
-                                response.setValue(responseDto.getValue());
-                            }
-
-                            return response;
-                        })
-                        .collect(Collectors.toList());
-                feedback.setResponses(responses);
-            }
+            feedback.setResponses(responses);
+        }
 
         return mapToDto(feedbackRepository.save(feedback));
     }
@@ -168,56 +174,40 @@ public class FeedbackService {
 
         staff.setMatricule(matricule);
 
-        ResponseDto responseDto = new ResponseDto();
-        responseDto.setValue(0);
-        responseDto.setSelectedLabel("");
-        List<ResponseDto> responsesDto = new ArrayList<>();
-        responsesDto.add(responseDto);
-
-        Response response = new Response();
-        response.setValue(0);
-        response.setSelectedLabel("");
-        List<Response> responses = new ArrayList<>();
-        responses.add(response);
-
-        Feedback feedback = new Feedback();
-        feedback.setId(feedback.getId());
-        feedback.setCustomerName("");
-        feedback.setCustomerPhone("");
-        feedback.setComment("");
-        feedback.setStaff(staff);
-        feedback.setResponses(responses);
-
-        List<QuestionDto> questionDto = questionRepository.findAll()
-                .stream()
-                .map(q -> {
-                    QuestionDto qDto = new QuestionDto();
-                    qDto.setId(q.getId());
-                    qDto.setLabelQuestion(q.getLabelQuestion());
-                    qDto.setInputType(q.getInputType());
-                    qDto.setPropositions(
+        List<QuestionDto> questionDto = questionRepository.findAllByOrderByIndexOrderAsc()
+                .stream().map(q -> {
+                    QuestionDto dto = new QuestionDto();
+                    dto.setId(q.getId());
+                    dto.setLabelQuestion(q.getLabelQuestion());
+                    dto.setInputType(q.getInputType());
+                    dto.setIndexOrder(q.getIndexOrder());
+                    dto.setPropositions(
                             q.getProposition().stream()
                                     .map(p -> new PropositionDto(p.getLabel(), p.getScore()))
-                                    .collect(Collectors.toList())
+                                    .toList()
                     );
-                    return qDto;
-                })
-                .toList();
+
+                    return dto;
+                }).toList();
+
+        List<ResponseDto> responseDto = questionRepository.findAll()
+                .stream().map(q -> {
+                    ResponseDto r = new ResponseDto();
+                    r.setQuestion_id(q.getId());
+                    r.setSelectedLabel("");
+                    r.setValue(0);
+                return r;
+        }).toList();
+
+
 
         FeedbackDto feedbackDto = new FeedbackDto();
-        feedbackDto.setCustomerName(feedback.getCustomerName());
-        feedbackDto.setCustomerPhone(feedback.getCustomerPhone());
+        feedbackDto.setCustomerName("");
+        feedbackDto.setCustomerPhone("");
+        feedbackDto.setComment("");
+        feedbackDto.setStaff_id(modelMapper.map(staff, StaffDto.class));
         feedbackDto.setQuestions(questionDto);
-        feedbackDto.setComment(feedback.getComment());
-        feedbackDto.setStaff_id(staff.getId());
-        feedbackDto.setResponses(responsesDto.stream().map(r1 -> {
-            ResponseDto responseDto2 = new ResponseDto();
-            responseDto2.setValue(r1.getValue());
-            responseDto2.setSelectedLabel(r1.getSelectedLabel());
-            responseDto2.setFeedback_id(r1.getFeedback_id());
-            responseDto2.setQuestion_id(r1.getQuestion_id());
-            return responseDto2;
-        }).collect(Collectors.toList()));
+        feedbackDto.setResponses(responseDto);
 
 
         return feedbackDto;

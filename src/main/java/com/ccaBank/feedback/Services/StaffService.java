@@ -1,5 +1,6 @@
 package com.ccaBank.feedback.services;
 
+import com.ccaBank.feedback.dtos.AgenceDto;
 import com.ccaBank.feedback.dtos.StaffDto;
 import com.ccaBank.feedback.entities.Agence;
 import com.ccaBank.feedback.entities.Staff;
@@ -33,8 +34,9 @@ public class StaffService {
         StaffDto staffDto = modelMapper.map(staff, StaffDto.class);
 
         if (staff.getAgence() != null) {
-            Agence agenceDto = staff.getAgence();
-            staffDto.setAgence_id(agenceDto.getId());
+            AgenceDto agenceDto = modelMapper.map(staff.getAgence(), AgenceDto.class);
+            staffDto.setAgence_id(agenceDto);
+
         }
         return staffDto;
     }
@@ -52,10 +54,11 @@ public class StaffService {
         staff.setStaffPhone(staffDto.getStaffPhone());
 
         if (staffDto.getAgence_id() != null) {
-            Agence agence = agenceRepository.findById(staffDto.getAgence_id()).orElseThrow(() ->
-                    new NosuchExistException("agence introuvable"));
+            Agence agence = agenceRepository.findById(staffDto.getAgence_id().getId())
+                    .orElseThrow(() -> new NosuchExistException("agence introuvable"));
             staff.setAgence(agence);
         }
+
         return mapToDto(staffRepository.save(staff));
     }
 

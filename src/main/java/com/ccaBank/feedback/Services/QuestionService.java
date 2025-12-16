@@ -61,6 +61,7 @@ public class QuestionService {
 
         question.setLabelQuestion(questionDto.getLabelQuestion());
         question.setInputType(questionDto.getInputType());
+        question.setIndexOrder(questionDto.getIndexOrder());
 
         if (questionDto.getPropositions() != null && !questionDto.getPropositions().isEmpty()) {
             List<Proposition> propositions = questionDto.getPropositions()

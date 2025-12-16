@@ -22,9 +22,9 @@ public class StaffController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addStaff(@RequestBody StaffDto staffDto){
-        staffService.createStaff(staffDto);
-        return  new ResponseEntity<>("staff created successfully", HttpStatus.CREATED);
+    public StaffDto addStaff(@RequestBody StaffDto staffDto){
+
+        return  staffService.createStaff(staffDto);
     }
 
     @GetMapping

@@ -20,9 +20,8 @@ public class AgenceController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addAgence(@RequestBody AgenceDto agenceDto) {
-        agenceService.createAgence(agenceDto);
-        return new ResponseEntity<>("agence created successfully", HttpStatus.CREATED);
+    public AgenceDto addAgence(@RequestBody AgenceDto agenceDto) {
+        return agenceService.createAgence(agenceDto);
     }
 
     @GetMapping

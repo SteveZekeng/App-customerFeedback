@@ -1,6 +1,7 @@
 package com.ccaBank.feedback.services;
 
 import com.ccaBank.feedback.dtos.FeedbackDto;
+import com.ccaBank.feedback.dtos.QuestionDto;
 import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.entities.Feedback;
 import com.ccaBank.feedback.entities.Question;
@@ -43,8 +44,8 @@ public class ResponseService {
             responseDto.setFeedback_id(feedbackDto.getId());
         }
         if(response.getQuestion() != null) {
-            Question questionDto = response.getQuestion();
-            responseDto.setQuestion_id(questionDto.getId());
+            Question question = response.getQuestion();
+            responseDto.setQuestion_id(question.getId());
         }
 
         return responseDto;
@@ -54,22 +55,22 @@ public class ResponseService {
         return modelMapper.map(responseDto, Response.class);
     }
 
-//    public ResponseDto createResponse(ResponseDto responseDto) {
-//        Response response = mapToEntity(responseDto);
-//
-//            if (responseDto.getFeedback_id() != null) {
-//                Feedback feedback = feedbackRepository.findById(responseDto.getFeedback_id()).orElseThrow(() ->
-//                        new NosuchExistException("feedback introuvable"));
-//                response.setFeedback(feedback);
-//            }
-//            if (responseDto.getQuestion_id() != null) {
-//                Question question = questionRepository.findById(responseDto.getQuestion_id()).orElseThrow(() ->
-//                        new NosuchExistException("question introuvable"));
-//                response.setQuestion(question);
-//            }
-//
-//        return mapToDto(responseRepository.save(response));
-//    }
+    public ResponseDto createResponse(ResponseDto responseDto) {
+        Response response = mapToEntity(responseDto);
+
+            if (responseDto.getFeedback_id() != null) {
+                Feedback feedback = feedbackRepository.findById(responseDto.getFeedback_id()).orElseThrow(() ->
+                        new NosuchExistException("feedback introuvable"));
+                response.setFeedback(feedback);
+            }
+            if (responseDto.getQuestion_id() != null) {
+                Question question = questionRepository.findById(responseDto.getQuestion_id()).orElseThrow(() ->
+                        new NosuchExistException("question introuvable"));
+                response.setQuestion(question);
+            }
+
+        return mapToDto(responseRepository.save(response));
+    }
 
     public List<ResponseDto> findAllResponses() {
         return responseRepository.findAll()

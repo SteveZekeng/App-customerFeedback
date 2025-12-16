@@ -21,6 +21,8 @@ public class QuestionDto {
     @NotNull
     private InputType inputType;
 
+    private Integer indexOrder;
+
     private List<PropositionDto> propositions;
 
 }

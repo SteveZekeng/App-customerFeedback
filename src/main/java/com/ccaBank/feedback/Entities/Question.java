@@ -28,6 +28,8 @@ public class Question {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Proposition> proposition;
 
+    private Integer indexOrder;
+
     @OneToMany(mappedBy = "question",  cascade = CascadeType.ALL)
     private List<Response> response;
 
