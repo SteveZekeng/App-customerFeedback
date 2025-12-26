@@ -103,18 +103,20 @@ public class QuestionService {
         } else {
             existingQuestion.get().setLabelQuestion(questionDto.getLabelQuestion());
             existingQuestion.get().setInputType(questionDto.getInputType());
-
+            existingQuestion.get().setIndexOrder(questionDto.getIndexOrder());
         }
+
         return mapToDto(questionRepository.save(existingQuestion.get()));
     }
 
 
+    @Transactional
     public void deleteQuestion(Long id) {
         Optional<Question> question = questionRepository.findById(id);
         if (!question.isPresent()) {
             throw new NosuchExistException("question introuvable ou inexistant");
         }
         questionRepository.deleteById(id);
-        log.info("question deleted successfully");
+
     }
 }

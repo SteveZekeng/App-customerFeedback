@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AgenceRepository extends JpaRepository<Agence, Long> {
 
+    Optional<Agence> findByAgenceLocation(String agenceLocation);
 }

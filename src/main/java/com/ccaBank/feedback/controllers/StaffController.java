@@ -1,11 +1,11 @@
 package com.ccaBank.feedback.controllers;
 
-import com.ccaBank.feedback.dtos.ResponseDto;
 import com.ccaBank.feedback.dtos.StaffDto;
 import com.ccaBank.feedback.services.StaffService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +28,9 @@ public class StaffController {
     }
 
     @GetMapping
-    public List<StaffDto> getAllStaffs(){
+    public Page<StaffDto> getAllStaffs(Pageable pageable) {
 
-        return staffService.findAllStaffs();
+        return staffService.findAllStaffs(pageable);
     }
 
     @GetMapping("/{id}")
@@ -53,6 +53,16 @@ public class StaffController {
     @GetMapping("/staffAgence/{agenceId}")
     public List<StaffDto> getAllByAgenceId(@PathVariable("agenceId") Long agenceId){
         return staffService.staffByAgenceId(agenceId);
+    }
+
+    @GetMapping("/listStaffOrderDesc")
+    public List<StaffDto> getListStaffOrder() {
+        return staffService.listStaffOrder();
+    }
+
+    @GetMapping("/listStaffByAgence")
+    public List<StaffDto> getListStaffByAgenceLocation(String agenceLocation){
+        return staffService.listStaffByAgenceLocation(agenceLocation);
     }
 }
 

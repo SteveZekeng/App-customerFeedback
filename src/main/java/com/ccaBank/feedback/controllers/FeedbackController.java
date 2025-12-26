@@ -3,8 +3,8 @@ package com.ccaBank.feedback.controllers;
 import com.ccaBank.feedback.dtos.FeedbackDto;
 import com.ccaBank.feedback.services.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -28,9 +28,9 @@ public class FeedbackController {
     }
 
     @GetMapping
-    public List<FeedbackDto> getAllFeedbacks(){
+    public Page<FeedbackDto> getAllFeedbacks(Pageable pageable) {
 
-        return feedbackService.findAllFeedbacks();
+        return feedbackService.findAllFeedbacks(pageable);
     }
 
     @GetMapping("/{id}")

@@ -17,5 +17,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     List<Staff> findByAgenceId(@Param("agenceId")Long agenceId);
 
+    List<Staff> findStaffByAgence_AgenceLocation(String agenceAgenceLocation);
+
 
 }

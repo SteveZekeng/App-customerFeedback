@@ -27,4 +27,6 @@ public class StaffDto {
     @NotNull
     private AgenceDto agence_id;
 
+    private double average;
+
 }

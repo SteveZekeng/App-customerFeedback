@@ -33,7 +33,8 @@ public class JWTFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
 
-        if (request.getServletPath().startsWith("/customFeedback/auth")) {
+        if (request.getServletPath().startsWith("/customFeedback/auth") ||
+        request.getServletPath().startsWith("/customFeedback/feedback/form"))  {
             filterChain.doFilter(request, response);
             return;
         }
@@ -50,7 +51,8 @@ public class JWTFilter extends OncePerRequestFilter {
         try {
             username = jwtUtil.validateTokenAndRetrieveSubject(token);
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            SecurityContextHolder.clearContext();
+            filterChain.doFilter(request, response);
             return;
         }
 

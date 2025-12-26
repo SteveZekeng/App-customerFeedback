@@ -1,12 +1,18 @@
 package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.LoginCreds;
+import com.ccaBank.feedback.dtos.TokenRefreshRequest;
+import com.ccaBank.feedback.entities.RefreshToken;
 import com.ccaBank.feedback.entities.User;
 import com.ccaBank.feedback.repositories.UserRepository;
+import com.ccaBank.feedback.security.JWTResponse;
+import com.ccaBank.feedback.security.TokenRefreshResponse;
+import com.ccaBank.feedback.services.RefreshTokenService;
 import com.ccaBank.feedback.util.JWTUtil;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +28,16 @@ public class AuthController {
     private final JWTUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthController(UserRepository userRepository, JWTUtil jwtUtil,
                           AuthenticationManager authenticationManager,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/register")
@@ -44,18 +52,56 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> loginHandler(@RequestBody LoginCreds body) {
-        try {
-            // Authentifier l’utilisateur
-            UsernamePasswordAuthenticationToken authInputToken =
-                    new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword());
-            authenticationManager.authenticate(authInputToken);
+    public ResponseEntity<?> loginHandler(@RequestBody LoginCreds body) {
 
-            // Génére le token JWT
-            String token = jwtUtil.generateToken(body.getUsername());
-            return Collections.singletonMap("jwt-token", token);
-        } catch (AuthenticationException authExc) {
-            throw new RuntimeException("Invalid username/password.");
-        }
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        body.getUsername(),
+                        body.getPassword()
+                )
+        );
+
+        User user = userRepository.findByUsername(body.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String jwt = jwtUtil.generateToken(user.getUsername());
+
+        RefreshToken refreshToken =
+                refreshTokenService.createRefreshToken(user);
+
+        return ResponseEntity.ok(
+                new JWTResponse(
+                        jwt,
+                        "Bearer",
+                        refreshToken.getToken(),
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail()
+                )
+        );
     }
+
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshToken(
+            @Valid @RequestBody TokenRefreshRequest request) {
+
+        RefreshToken refreshToken =
+                refreshTokenService.verifyExpiration(
+                        refreshTokenService.getByToken(request.getRefreshToken())
+                );
+
+        String newAccessToken =
+                jwtUtil.generateToken(refreshToken.getUser().getUsername());
+
+        return ResponseEntity.ok(
+                new TokenRefreshResponse(
+                        newAccessToken,
+                        refreshToken.getToken(),
+                        "Bearer"
+                )
+        );
+    }
+
+
 }

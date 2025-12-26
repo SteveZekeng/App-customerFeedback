@@ -50,14 +50,12 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/customFeedback/feedback/form/**").permitAll()
-                        .requestMatchers("/customFeedback/auth/login").permitAll()
-                        .requestMatchers("/customFeedback/auth/register").permitAll()
+                        .requestMatchers("/customFeedback/auth/**").permitAll()
                         .requestMatchers("/customFeedback/feedback/addFeedback").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
 
-                )
-                .httpBasic(Customizer.withDefaults());
+                );
 
 
 

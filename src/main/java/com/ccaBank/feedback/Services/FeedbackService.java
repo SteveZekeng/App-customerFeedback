@@ -9,10 +9,10 @@ import com.ccaBank.feedback.repositories.ResponseRepository;
 import com.ccaBank.feedback.repositories.StaffRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -133,10 +133,9 @@ public class FeedbackService {
     }
 
 
-    public List<FeedbackDto> findAllFeedbacks() {
-        return feedbackRepository.findAll()
-                .stream().map(this::mapToDto)
-                .collect(Collectors.toList());
+    public Page<FeedbackDto> findAllFeedbacks(Pageable pageable) {
+        return feedbackRepository.findAll(pageable)
+                .map(this::mapToDto);
     }
 
     public FeedbackDto findFeedbackById(Long id) {
@@ -151,13 +150,14 @@ public class FeedbackService {
         return mapToDto(feedback);
     }
 
+    @Transactional
     public void deleteFeedback(Long id) {
         Optional<Feedback> feedback = feedbackRepository.findById(id);
         if (!feedback.isPresent()) {
             throw new NosuchExistException("feedback introuvable ou inexistant");
         }
         feedbackRepository.deleteById(id);
-        log.info("feedback deleted successfully");
+
     }
 
     public List<FeedbackDto> feedbackByStaffId (Long staffId) {

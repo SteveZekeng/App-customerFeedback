@@ -9,8 +9,12 @@ import com.ccaBank.feedback.repositories.AgenceRepository;
 import com.ccaBank.feedback.repositories.StaffRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,10 +66,9 @@ public class StaffService {
         return mapToDto(staffRepository.save(staff));
     }
 
-    public List<StaffDto> findAllStaffs() {
-        return staffRepository.findAll()
-                .stream().map(this::mapToDto)
-                .collect(Collectors.toList());
+    public Page<StaffDto> findAllStaffs(Pageable pageable) {
+        return staffRepository.findAll(pageable)
+                .map(this::mapToDto);
     }
 
     public StaffDto findStaffById(Long id) {
@@ -92,13 +95,14 @@ public class StaffService {
         return mapToDto(staffRepository.save(existingStaff.get()));
     }
 
+    @Transactional
     public void deleteStaff(Long id){
         Optional<Staff> existingStaff = staffRepository.findById(id);
         if (!existingStaff.isPresent()) {
             throw new NosuchExistException("staff introuvable ou inexistant");
         }
         staffRepository.deleteById(id);
-        log.info("staff deleted successfully");
+
     }
 
     public List<StaffDto> staffByAgenceId(Long agenceId) {
@@ -108,6 +112,26 @@ public class StaffService {
         }
         return staffRepository.findByAgenceId(agenceId)
                 .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<StaffDto> listStaffOrder() {
+        List<Staff> staffs = staffRepository.findAll();
+        staffs.sort(Comparator.comparing(Staff::getAverage).reversed().thenComparing(Staff::getStaffName));
+        return staffs.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<StaffDto> listStaffByAgenceLocation(String agenceLocation) {
+        Optional<Agence> agence = agenceRepository.findByAgenceLocation(agenceLocation);
+        if(!agence.isPresent()) {
+            throw new NosuchExistException("agence introuvable ou inexistante");
+        }
+        List<Staff> staffs = staffRepository.findStaffByAgence_AgenceLocation(agenceLocation);
+        staffs.sort(Comparator.comparing(Staff::getAverage).reversed().thenComparing(Staff::getStaffName));
+        return staffs.stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }

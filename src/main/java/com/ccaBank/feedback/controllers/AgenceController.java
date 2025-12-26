@@ -2,6 +2,8 @@ package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.AgenceDto;
 import com.ccaBank.feedback.services.AgenceService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,8 @@ public class AgenceController {
     }
 
     @GetMapping
-    public List<AgenceDto> getAllAgences() {
-        return agenceService.findAllAgences();
+    public Page<AgenceDto> getAllAgences(Pageable pageable) {
+        return agenceService.findAllAgences(pageable);
     }
 
     @GetMapping("/{id}")

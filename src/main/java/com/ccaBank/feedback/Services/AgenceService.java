@@ -6,6 +6,8 @@ import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.AgenceRepository;
 import com.ccaBank.feedback.repositories.StaffRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -39,10 +41,9 @@ public class AgenceService {
         return mapToDto(agenceRepository.save(agence));
     }
 
-    public List<AgenceDto> findAllAgences () {
-        return agenceRepository.findAll().stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
+    public Page<AgenceDto> findAllAgences (Pageable pageable) {
+        return agenceRepository.findAll(pageable)
+                .map(this::mapToDto);
     }
 
     public AgenceDto findAgenceById(Long id){

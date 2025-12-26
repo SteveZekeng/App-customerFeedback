@@ -62,6 +62,7 @@ public class PropositionService {
         } else {
             existingProposition.get().setLabel(propositionDto.getLabel());
             existingProposition.get().setScore(propositionDto.getScore());
+
         }
         return mapToDto(propositionRepository.save(existingProposition.get()));
     }
@@ -72,6 +73,6 @@ public class PropositionService {
             throw new NosuchExistException("proposition introuvable");
         }
         propositionRepository.deleteById(id);
-        log.info("proposition deleted successfully");
+
     }
 }

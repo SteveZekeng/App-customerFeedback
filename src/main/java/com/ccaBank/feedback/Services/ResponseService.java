@@ -107,7 +107,7 @@ public class ResponseService {
             throw new NosuchExistException("reponse introuvable ou inexistante");
         }
         responseRepository.deleteById(id);
-        log.info("response deleted successfully");
+
     }
 
 
