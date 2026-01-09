@@ -30,6 +30,9 @@ public class Agence {
     @OneToMany(mappedBy = "agence", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Staff> staffs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "agence", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<RDV> rdvList;
+
     public double getAverage(){
         return staffs.stream().mapToDouble(Staff::getAverage).average().orElse(0.0);
     }

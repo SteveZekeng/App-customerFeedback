@@ -2,6 +2,7 @@ package com.ccaBank.feedback.dtos;
 
 import com.ccaBank.feedback.entities.Question;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class FeedbackDto {
     @NotNull
     private String customerName;
 
-    @NotNull
+    @NotNull @Size(min=9, max=9)
     private String customerPhone;
 
     private String comment;

@@ -21,8 +21,7 @@ public class AgenceService {
     private final AgenceRepository agenceRepository;
     private final ModelMapper modelMapper;
 
-    public AgenceService(AgenceRepository agenceRepository, StaffRepository staffRepository,
-                         ModelMapper modelMapper) {
+    public AgenceService(AgenceRepository agenceRepository, ModelMapper modelMapper) {
         this.agenceRepository = agenceRepository;
         this.modelMapper = modelMapper;
     }
