@@ -52,10 +52,16 @@ public class SecurityConfig {
                         .requestMatchers("/customFeedback/feedback/form/**").permitAll()
                         .requestMatchers("/customFeedback/auth/**").permitAll()
                         .requestMatchers("/customFeedback/feedback/addFeedback").permitAll()
+                        .requestMatchers("/gestionFA/client/**").permitAll()
+                        .requestMatchers("/customFeedback/agence/selectGFA").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
 
                 );
+
+//                .requestMatchers("/customFeedback/staff/**").hasRole("ADMIN")
+//                .requestMatchers("/customFeedback/client/**").hasRole("USER")
+
 
 
 

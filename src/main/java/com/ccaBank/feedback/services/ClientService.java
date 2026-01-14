@@ -31,10 +31,10 @@ public class ClientService {
         return modelMapper.map(clientDto, Client.class);
     }
 
-    public ClientDto createClient(ClientDto clientDto) {
-        Client client = mapToEntity(clientDto);
-        return mapToDto(clientRepository.save(client));
-    }
+//    public ClientDto createClient(ClientDto clientDto) {
+//        Client client = mapToEntity(clientDto);
+//        return mapToDto(clientRepository.save(client));
+//    }
 
     public List<ClientDto> getAllClients() {
         return clientRepository.findAll()

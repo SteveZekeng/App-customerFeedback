@@ -62,7 +62,7 @@ public class AuthController {
         );
 
         User user = userRepository.findByUsername(body.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User introuvable"));
 
         String jwt = jwtUtil.generateToken(user.getUsername());
 

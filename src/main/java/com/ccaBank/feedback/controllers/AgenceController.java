@@ -31,6 +31,12 @@ public class AgenceController {
         return agenceService.findAllAgences(pageable);
     }
 
+    @GetMapping("/selectGFA")
+    public List<AgenceDto> getAllAgence() {
+        return agenceService.findAllAgence();
+    }
+
+
     @GetMapping("/{id}")
     public AgenceDto getAgenceById(@PathVariable("id") Long id) {
         return agenceService.findAgenceById(id);

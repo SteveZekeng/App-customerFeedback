@@ -18,14 +18,14 @@ public class RDV {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "numero de reference", unique = true)
+    @Column(nullable = false, name = "numero_reference", unique = true)
     private String referenceNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "statut du RDV")
+    @Column(name = "statut_RDV")
     private StatutRDV statutRDV;
 
-    @Column(nullable = false, name = "date et heure")
+    @Column(nullable = false, name = "date_et_heure")
     private LocalDateTime date_heure;
 
     @ManyToOne

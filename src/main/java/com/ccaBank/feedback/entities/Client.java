@@ -22,6 +22,17 @@ public class Client {
     @Column(nullable = false, name = "telephone", unique = true)
     private String phone;
 
+    @Column(nullable = false)
+    private String ville;
+
+    @Column(name = "numero_de_compte")
+    private Long numeroCompte;
+
+
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RDV> rdvList;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

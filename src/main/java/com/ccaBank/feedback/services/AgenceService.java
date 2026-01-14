@@ -45,6 +45,13 @@ public class AgenceService {
                 .map(this::mapToDto);
     }
 
+    public List<AgenceDto> findAllAgence () {
+        return agenceRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     public AgenceDto findAgenceById(Long id){
         Agence agence;
         try {

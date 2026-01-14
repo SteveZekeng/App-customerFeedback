@@ -24,8 +24,7 @@ public class JWTUtil {
 
         return JWT.create()
                 .withSubject(username)
-                .withIssuedAt(now)
-                .withExpiresAt(expiry)
+                .withIssuedAt(now)                .withExpiresAt(expiry)
                 .withIssuer("CustomerFeedback App")
                 .sign(Algorithm.HMAC256(secret));
     }
