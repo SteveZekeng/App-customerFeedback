@@ -26,7 +26,10 @@ public class Client {
     private String ville;
 
     @Column(name = "numero_de_compte")
-    private Long numeroCompte;
+    private String numeroCompte;
+
+    @Column(nullable = false)
+    private String email;
 
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -36,3 +39,4 @@ public class Client {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
+

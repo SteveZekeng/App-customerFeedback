@@ -1,6 +1,7 @@
 package com.ccaBank.feedback.services;
 
 import com.ccaBank.feedback.dtos.ServiceBancaireDto;
+import com.ccaBank.feedback.entities.Category;
 import com.ccaBank.feedback.entities.ServiceBancaire;
 import com.ccaBank.feedback.exceptions.NosuchExistException;
 import com.ccaBank.feedback.repositories.ServiceBancaireRepository;
@@ -74,4 +75,12 @@ public class ServiceBancaireService {
         }
         serviceBRepository.deleteById(id);
     }
+
+    public List<ServiceBancaireDto> getServicesByCategory(Category category) {
+        return serviceBRepository.findByCategory(category)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
 }

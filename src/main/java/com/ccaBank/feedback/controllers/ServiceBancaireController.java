@@ -1,6 +1,7 @@
 package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.ServiceBancaireDto;
+import com.ccaBank.feedback.entities.Category;
 import com.ccaBank.feedback.services.ServiceBancaireService;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,11 @@ public class ServiceBancaireController {
     @DeleteMapping("/{id}")
     public void deleteServiceBancaire(@PathVariable Long id) {
         serviceBancaireService.deleteServiceBancaire(id);
+    }
+
+    @GetMapping("/category/{category}")
+    public List<ServiceBancaireDto> getByCategory(@PathVariable Category category) {
+        return serviceBancaireService.getServicesByCategory(category);
     }
 
 

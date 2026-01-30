@@ -1,9 +1,7 @@
 package com.ccaBank.feedback.dtos;
 
-import com.ccaBank.feedback.entities.Agence;
-import com.ccaBank.feedback.entities.Client;
-import com.ccaBank.feedback.entities.ServiceBancaire;
 import com.ccaBank.feedback.entities.StatutRDV;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,14 +21,17 @@ public class RDVDto {
 
     private StatutRDV statutRDV;
 
-    @NotNull
-    private LocalDateTime date_heure;
-    @NotNull
-    private ClientDto client_id;
+    @NotNull @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dateHeure;
+
+    private ClientDto client_Id;
 
     @NotNull
-    private ServiceBancaireDto serviceBancaire_id;
+    private AgenceDto agence_Id;
 
     @NotNull
-    private AgenceDto agence_id;
+    private ServiceBancaireDto serviceBancaire_Id;
+
+    private String staffMatricule;
+
 }

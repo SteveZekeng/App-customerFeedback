@@ -34,9 +34,9 @@ public class Staff {
     @OneToMany(mappedBy = "staff", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Feedback> feedback = new ArrayList<>();
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "agence_id")

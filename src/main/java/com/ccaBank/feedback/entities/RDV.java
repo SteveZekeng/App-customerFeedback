@@ -26,7 +26,7 @@ public class RDV {
     private StatutRDV statutRDV;
 
     @Column(nullable = false, name = "date_et_heure")
-    private LocalDateTime date_heure;
+    private LocalDateTime dateHeure;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -39,5 +39,9 @@ public class RDV {
     @ManyToOne
     @JoinColumn(name = "agence_id")
     private Agence agence;
+
+    @ManyToOne
+    @JoinColumn(name = "staff_id")
+    private Staff staff;
 
 }

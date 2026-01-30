@@ -10,28 +10,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDto {
-
-    private Long id;
+public class RegisterUserDto {
 
     @NotNull
     private String username;
 
+    @NotNull
+    private String password;
+
+    // Spécifique au client
+    private String firstName;
+    @Size(min=9, max=9)
+    private String phone;
+    private String ville;
+    private String numeroCompte;
     @Email
     private String email;
-//
-//    @NotNull @Size(min = 6 , max = 15)
-//    private String password;
+
+    // Spécifique au staff
+    private String staffName;
+    @Size(min=9, max=9)
+    private String staffPhone;
+    @Email
+    private String staffEmail;
+    private String matricule;
+    private AgenceDto agenceId;
 
     @NotNull
-    private String firstName;
-
-    @NotNull @Size(min=9, max=9)
-    private String phone;
-
-    @NotNull
-    private String ville;
-
-    private String numeroCompte;
-
+    private String typeUser;
 }

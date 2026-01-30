@@ -15,8 +15,8 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+//    @Column(nullable = false, unique = true)
+//    private String email;
 
     @Column(nullable = false, length = 30, unique = true)
     private String username;
@@ -24,11 +24,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Staff staff;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Staff staff;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Client client;

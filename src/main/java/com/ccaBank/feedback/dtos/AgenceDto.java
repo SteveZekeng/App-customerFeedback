@@ -23,6 +23,4 @@ public class AgenceDto {
 
     private double average;
 
-    private String agenceSelected;
-
 }

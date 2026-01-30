@@ -62,6 +62,7 @@ public class ClientService {
         } else {
             existingClient.get().setFirstName(clientDto.getFirstName());
             existingClient.get().setPhone(clientDto.getPhone());
+            existingClient.get().setEmail(clientDto.getEmail());
         }
         return mapToDto(clientRepository.save(existingClient.get()));
     }

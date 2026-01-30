@@ -29,4 +29,7 @@ public class StaffDto {
 
     private double average;
 
+    @NotNull
+    private String username;
+
 }

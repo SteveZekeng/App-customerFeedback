@@ -30,28 +30,29 @@ public class ClientController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping
-    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDto dto) {
-
-        User user = new User();
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(Role.ROLE_USER);
-
-        user = userRepository.save(user);
-
-        Client client = new Client();
-        client.setFirstName(dto.getFirstName());
-        client.setPhone(dto.getPhone());
-        client.setVille(dto.getVille());
-        client.setNumeroCompte(dto.getNumeroCompte());
-        client.setUser(user);
-
-        clientRepository.save(client);
-
-        return ResponseEntity.ok("Client enregistré avec succès");
-    }
+//    @PostMapping
+//    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDto dto) {
+//
+//        User user = new User();
+//        user.setUsername(dto.getUsername());
+////        user.setEmail(dto.getEmail());
+//        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+//        user.setRole(Role.ROLE_CLIENT);
+//
+//        user = userRepository.save(user);
+//
+//        Client client = new Client();
+//        client.setFirstName(dto.getFirstName());
+//        client.setPhone(dto.getPhone());
+//        client.setVille(dto.getVille());
+//        client.setNumeroCompte(dto.getNumeroCompte());
+//        client.setEmail(dto.getEmail());
+//        client.setUser(user);
+//
+//        clientRepository.save(client);
+//
+//        return ResponseEntity.ok("Client enregistré avec succès");
+//    }
 
     @GetMapping
     public List<ClientDto> getAllClients() {
@@ -72,4 +73,6 @@ public class ClientController {
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }
+
+
 }

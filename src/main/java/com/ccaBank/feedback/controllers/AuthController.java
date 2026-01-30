@@ -1,18 +1,27 @@
 package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.LoginCreds;
+import com.ccaBank.feedback.dtos.RegisterUserDto;
 import com.ccaBank.feedback.dtos.TokenRefreshRequest;
-import com.ccaBank.feedback.entities.RefreshToken;
-import com.ccaBank.feedback.entities.User;
+import com.ccaBank.feedback.entities.*;
+import com.ccaBank.feedback.repositories.AgenceRepository;
+import com.ccaBank.feedback.repositories.ClientRepository;
+import com.ccaBank.feedback.repositories.StaffRepository;
 import com.ccaBank.feedback.repositories.UserRepository;
 import com.ccaBank.feedback.security.JWTResponse;
 import com.ccaBank.feedback.security.TokenRefreshResponse;
+import com.ccaBank.feedback.services.AuthService;
+import com.ccaBank.feedback.services.ClientService;
+import com.ccaBank.feedback.services.OtpService;
 import com.ccaBank.feedback.services.RefreshTokenService;
 import com.ccaBank.feedback.util.JWTUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,83 +33,82 @@ import java.util.Map;
 
 public class AuthController {
 
-    private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final OtpService otpService;
+    private final AuthService authService;
 
-    public AuthController(UserRepository userRepository, JWTUtil jwtUtil,
+    public AuthController(JWTUtil jwtUtil,
                           AuthenticationManager authenticationManager,
-                          PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
-        this.userRepository = userRepository;
+                          RefreshTokenService refreshTokenService,
+                          OtpService otpService, AuthService authService) {
+
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
         this.refreshTokenService = refreshTokenService;
+        this.otpService = otpService;
+        this.authService = authService;
     }
 
     @PostMapping("/register")
-    public Map<String, Object> registerHandler(@RequestBody User user) {
-        // Encoder le mot de passe avant sauvegarde
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user = userRepository.save(user);
-
-        // Génére un JWT pour l’utilisateur
-        String token = jwtUtil.generateToken(user.getUsername());
-        return Collections.singletonMap("jwt-token", token);
+    public ResponseEntity<JWTResponse> register(@RequestBody RegisterUserDto dto) {
+        JWTResponse response = authService.register(dto);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginHandler(@RequestBody LoginCreds body) {
-
+    public ResponseEntity<JWTResponse> login(@RequestBody LoginCreds body) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        body.getUsername(),
-                        body.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword())
         );
 
-        User user = userRepository.findByUsername(body.getUsername())
-                .orElseThrow(() -> new RuntimeException("User introuvable"));
+        User user = authService.getUserByUsername(body.getUsername());
+        String jwt = authService.generateToken(user);
+        RefreshToken refreshToken = authService.createRefreshToken(user);
 
-        String jwt = jwtUtil.generateToken(user.getUsername());
-
-        RefreshToken refreshToken =
-                refreshTokenService.createRefreshToken(user);
-
-        return ResponseEntity.ok(
-                new JWTResponse(
-                        jwt,
-                        "Bearer",
-                        refreshToken.getToken(),
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail()
-                )
-        );
+        return ResponseEntity.ok(new JWTResponse(
+                jwt, "Bearer", refreshToken.getToken(),
+                user.getId(), user.getUsername(), user.getRole()
+        ));
     }
 
 
-    @PostMapping("/refreshtoken")
-    public ResponseEntity<?> refreshToken(
-            @Valid @RequestBody TokenRefreshRequest request) {
+//    @PostMapping("/refreshtoken")
+//    public ResponseEntity<?> refreshToken(
+//            @Valid @RequestBody TokenRefreshRequest request) {
+//
+//        RefreshToken refreshToken =
+//                refreshTokenService.verifyExpiration(
+//                        refreshTokenService.getByToken(request.getRefreshToken())
+//                );
+//
+//        String newAccessToken =
+//                jwtUtil.generateToken(refreshToken.getUser().getUsername());
+//
+//        return ResponseEntity.ok(
+//                new TokenRefreshResponse(
+//                        newAccessToken,
+//                        refreshToken.getToken(),
+//                        "Bearer"
+//                )
+//        );
+//    }
 
-        RefreshToken refreshToken =
-                refreshTokenService.verifyExpiration(
-                        refreshTokenService.getByToken(request.getRefreshToken())
-                );
+    @PostMapping("/generate-otp")
+    public ResponseEntity<Map<String, String>> generateOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        otpService.generateOtp(email);
+        return ResponseEntity.ok(Collections.singletonMap("message", "L'OTP vous a été envoyé dans votre mail"));
+    }
 
-        String newAccessToken =
-                jwtUtil.generateToken(refreshToken.getUser().getUsername());
 
-        return ResponseEntity.ok(
-                new TokenRefreshResponse(
-                        newAccessToken,
-                        refreshToken.getToken(),
-                        "Bearer"
-                )
-        );
+    @PostMapping("/validate-otp")
+    public ResponseEntity<Boolean> validateOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+        boolean isValid = otpService.validateOtp(email, otp);
+        return ResponseEntity.ok(isValid);
     }
 
 

@@ -1,5 +1,6 @@
 package com.ccaBank.feedback.security;
 
+import com.ccaBank.feedback.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ public class JWTResponse {
     private String refreshToken;
     private Long id;
     private String username;
-    private String email;
+//    private String email;
+    private Role role;
 }

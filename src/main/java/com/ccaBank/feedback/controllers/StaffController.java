@@ -1,11 +1,19 @@
 package com.ccaBank.feedback.controllers;
 
+import com.ccaBank.feedback.dtos.ClientDto;
 import com.ccaBank.feedback.dtos.StaffDto;
+import com.ccaBank.feedback.entities.Client;
+import com.ccaBank.feedback.entities.Role;
+import com.ccaBank.feedback.entities.Staff;
+import com.ccaBank.feedback.entities.User;
 import com.ccaBank.feedback.services.StaffService;
 
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,16 +24,35 @@ import java.util.List;
 public class StaffController {
 
     private final StaffService staffService;
+    private final PasswordEncoder passwordEncoder;
 
-    public StaffController(StaffService staffService) {
+    public StaffController(StaffService staffService, PasswordEncoder passwordEncoder) {
     this.staffService = staffService;
+    this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping
-    public StaffDto addStaff(@RequestBody StaffDto staffDto){
-
-        return  staffService.createStaff(staffDto);
-    }
+//    @PostMapping
+//    public ResponseEntity<?> registerStaff(@Valid @RequestBody StaffDto dto) {
+//
+//        User user = new User();
+//        user.setUsername(dto.getUsername());
+////        user.setEmail(dto.getEmail());
+//        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+//        user.setRole(Role.ROLE_STAFF);
+//
+//        user = staffService.save(user);
+//
+//        Staff staff = new Staff();
+//        staff.setStaffName(dto.getStaffName());
+//        staff.setStaffEmail(dto.getStaffEmail());
+//        staff.setStaffPhone(dto.getStaffPhone());
+//        staff.setMatricule(dto.getMatricule());
+//        staff.setUser(user);
+//
+//        clientRepository.save(client);
+//
+//        return ResponseEntity.ok("Client enregistré avec succès");
+//    }
 
     @GetMapping
     public Page<StaffDto> getAllStaffs(Pageable pageable) {

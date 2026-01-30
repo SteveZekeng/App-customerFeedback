@@ -50,10 +50,15 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/customFeedback/feedback/form/**").permitAll()
-                        .requestMatchers("/customFeedback/auth/**").permitAll()
+                        .requestMatchers("/customFeedback/auth/login").permitAll()
+                        .requestMatchers("/customFeedback/auth/register").permitAll()
                         .requestMatchers("/customFeedback/feedback/addFeedback").permitAll()
                         .requestMatchers("/gestionFA/client/**").permitAll()
+                        .requestMatchers("/customFeedback/staff/**").permitAll()
                         .requestMatchers("/customFeedback/agence/selectGFA").permitAll()
+                        .requestMatchers("/customFeedback/agence/**").permitAll()
+                        .requestMatchers("//gestionFA/serviceBancaire/**").permitAll()
+                        .requestMatchers("/gestionFA/RDV/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
 
