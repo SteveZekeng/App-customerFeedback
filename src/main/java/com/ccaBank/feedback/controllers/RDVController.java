@@ -75,12 +75,13 @@ public class RDVController {
     }
 
     @PutMapping("/{id}/confirmer")
-    @PreAuthorize("hasRole('STAFF')")
+    @PreAuthorize("hasAnyRole('STAFF','ADMIN')")
     public RDVDto confirmerRDV(@PathVariable Long id, Authentication auth) {
         return rdvService.confirmerRDV(id, auth.getName());
     }
 
     @PutMapping("/{id}/honorer")
+    @PreAuthorize("hasRole('CLIENT')")
     public void honorRDV(@PathVariable Long id) {
          this.rdvService.honorerRDV(id);
     }

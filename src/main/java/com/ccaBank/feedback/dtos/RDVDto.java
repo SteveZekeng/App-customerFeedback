@@ -21,7 +21,7 @@ public class RDVDto {
 
     private StatutRDV statutRDV;
 
-    @NotNull @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @NotNull @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateHeure;
 
     private ClientDto client_Id;
