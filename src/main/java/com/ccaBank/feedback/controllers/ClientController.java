@@ -1,14 +1,16 @@
 package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.ClientDto;
-import com.ccaBank.feedback.entities.Client;
-import com.ccaBank.feedback.entities.Role;
-import com.ccaBank.feedback.entities.User;
+import com.ccaBank.feedback.dtos.RegisterUserDto;
 import com.ccaBank.feedback.repositories.ClientRepository;
 import com.ccaBank.feedback.repositories.UserRepository;
 import com.ccaBank.feedback.services.ClientService;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/gestionFA/client")
+@Tag(name = "Customers", description = "Client REST API")
+
 public class ClientController {
 
     private final ClientService clientService;
@@ -54,21 +58,25 @@ public class ClientController {
 //        return ResponseEntity.ok("Client enregistré avec succès");
 //    }
 
+    @Operation(summary = "Liste des clients")
     @GetMapping
     public List<ClientDto> getAllClients() {
         return clientService.getAllClients();
     }
 
+    @Operation(summary = "Retourner le detail d'un client")
     @GetMapping("/{id}")
     public ClientDto getClientById(@PathVariable Long id) {
         return clientService.findClientById(id);
     }
 
+    @Operation(summary = "Mise a jour d'un client")
     @PutMapping("/{id}")
     public ClientDto updateClient(@PathVariable Long id, @RequestBody ClientDto clientDto) {
         return clientService.updateClient(clientDto, id);
     }
 
+    @Operation(summary = "Suppression d'un client")
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);

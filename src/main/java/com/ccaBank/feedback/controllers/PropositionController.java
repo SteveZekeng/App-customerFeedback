@@ -2,12 +2,15 @@ package com.ccaBank.feedback.controllers;
 
 import com.ccaBank.feedback.dtos.PropositionDto;
 import com.ccaBank.feedback.services.PropositionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/customFeedback/proposition")
+@Tag(name = "Propositions", description = "Proposition REST API")
 
 public class PropositionController {
 
@@ -17,6 +20,7 @@ public class PropositionController {
         this.propositionService = propositionService;
     }
 
+    @Operation(summary = "Liste des propositions")
     @GetMapping
     public List<PropositionDto> getAllPropositions(){
 

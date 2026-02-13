@@ -57,8 +57,8 @@ public class SecurityConfig {
                         .requestMatchers("/customFeedback/staff/**").permitAll()
                         .requestMatchers("/customFeedback/agence/selectGFA").permitAll()
                         .requestMatchers("/customFeedback/agence/**").permitAll()
-                        .requestMatchers("//gestionFA/serviceBancaire/**").permitAll()
                         .requestMatchers("/gestionFA/RDV/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
 
