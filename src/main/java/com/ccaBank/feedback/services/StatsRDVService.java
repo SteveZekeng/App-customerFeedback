@@ -33,9 +33,9 @@ public class StatsRDVService {
         return new StatsRDVAgenceDto(
                 staff.getAgence().getAgenceLocation(),
                 rdvRepository.countByAgence(agenceId),
-                rdvRepository.countByAgenceAndStatut(agenceId, StatutRDV.HONNORER),
+                rdvRepository.countByAgenceAndStatut(agenceId, StatutRDV.EN_ATTENTE),
                 rdvRepository.countByAgenceAndStatut(agenceId, StatutRDV.CONFIRMER),
-                rdvRepository.countByAgenceAndStatut(agenceId, StatutRDV.EN_ATTENTE)
+                rdvRepository.countByAgenceAndStatut(agenceId, StatutRDV.HONNORER)
         );
     }
 

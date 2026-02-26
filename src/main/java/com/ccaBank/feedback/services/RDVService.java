@@ -213,8 +213,8 @@ public class RDVService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
+        LocalDateTime startOfDay = LocalDate.now().minusDays(30).atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().plusDays(30).atTime(23, 59, 59);
 
         List<StatutRDV> allowedStatuts =
                 List.of(StatutRDV.EN_ATTENTE, StatutRDV.CONFIRMER);
